@@ -250,7 +250,7 @@ function renderAll(){
  document.getElementById("locations").innerHTML=`<div class="panel"><h2>Location History</h2>${toolbar("locations","Search fleet / location / event","+ Add Location Log","openLocation()")}${tableShell("locations",["Date/Time","Fleet","Location","Event","Engine Hrs"])}</div>`;
  document.getElementById("inventory").innerHTML=`<div class="panel"><h2>Garage Inventory</h2>${toolbar("inventory","Search item / part / category","+ Add Stock Item","openInventory()")}${tableShell("inventory",["Part No.","Item","Category","Qty","Minimum","Unit","Garage Location","Supplier","Status"])}</div>`;
  document.getElementById("staff").innerHTML=`<div class="panel"><h2>Staff Records</h2>${toolbar("staff","Search staff / passport / designation","+ Add Staff","openStaff()")}${tableShell("staff",["Staff ID","Name","Passport No.","License No.","License Expiry","Designation","Phone","Documents","Status"])}</div>`;
- document.getElementById("vehicleRecords").innerHTML=`<div class="panel"><h2>Vehicle Records</h2>${toolbar("vehicleRecords","Search fleet / registration / VIN","+ Add Vehicle Record","openVehicle()")}${tableShell("vehicleRecords",["Fleet ID","Registration","VIN / Serial","Insurance Policy","Insurance Exp.","Registration Exp.","Inspection Exp.","Purchase Date","Documents"])}</div>`;
+ document.getElementById("vehicleRecords").innerHTML=`<div class="panel"><h2>Vehicle Records</h2>${toolbar("vehicleRecords","Search fleet / registration / VIN","+ Add Vehicle Record","openVehicle()")}${tableShell("vehicleRecords",["Fleet ID","Registration","Vehicle Model","Insurance Policy","Insurance Exp.","Registration Exp.","Inspection Exp.","Purchase Date","Documents"])}</div>`;
  document.getElementById("documents").innerHTML=`<div class="panel"><h2>Documents & Expiry</h2>${toolbar("documents","Search fleet / document","+ Upload Document","openDocument()")}${tableShell("documents",["Fleet","Document","Expiry","Days Left","File","Status"])}</div>`;
  document.getElementById("users").innerHTML=`<div class="panel"><h2>User Management</h2>${toolbar("users","Search user / role","+ Add User","openUser()")}${tableShell("users",["Username","Name","Role","Email","Phone","Status"])}</div>`;
  renderReports();
@@ -442,7 +442,7 @@ async function saveStaff(e,id){e.preventDefault();let nf=[...await captureFiles(
 function openVehicle(id){let v=id?find("vehicleRecords",id):{};openModal(id?"Edit Vehicle Record":"Add Vehicle Record",`<form onsubmit="saveVehicle(event,'${id||""}')"><div class="formgrid">
  <div class="field"><label>Fleet ID</label><select id="v_fleet">${fleetOpts(v.fleet)}</select></div>
  <div class="field"><label>Registration No.</label><input id="v_reg" value="${esc(v.registration||"")}" required></div>
- <div class="field"><label>VIN / Serial No.</label><input id="v_vin" value="${esc(v.vin||"")}"></div>
+ <div class="field"><label>Vehicle Model No.</label><input id="v_vin" value="${esc(v.vin||"")}"></div>
  <div class="field"><label>Insurance Policy No.</label><input id="v_ins" value="${esc(v.insurancePolicy||"")}"></div>
  <div class="field"><label>Insurance Expiry</label><input id="v_insexp" type="date" value="${esc(v.insuranceExpiry||"")}"></div>
  <div class="field"><label>Registration Expiry</label><input id="v_regexp" type="date" value="${esc(v.registrationExpiry||"")}"></div>
