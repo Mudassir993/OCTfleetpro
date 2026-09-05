@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O.C.T. FleetPro V2</title>
+<style>
+:root{--nav:#10233f;--accent:#0878c9;--brand-red:#ed1b2f;--bg:#f4f6f8;--card:#fff;--text:#172033;--muted:#64748b;--border:#e5e7eb;--green:#16a34a;--orange:#ea580c;--red:#dc2626}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+.hidden{display:none!important}.login{min-height:100vh;display:grid;place-items:center;padding:20px}.loginbox{width:min(420px,100%);background:white;border:1px solid var(--border);border-radius:14px;padding:30px;box-shadow:0 10px 35px #00000012}.logo{font-size:25px;font-weight:800;margin-bottom:8px}.logo span{color:#3b82f6}.sub{color:var(--muted);font-size:13px;margin-bottom:24px}.field{margin:13px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}.btn{border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:700}.primary{background:var(--accent);color:#fff}.secondary{background:#eef2f7;color:#334155}.danger{background:#fee2e2;color:#991b1b}.login .btn{width:100%;margin-top:8px}.demo{font-size:11px;color:#64748b;background:#f8fafc;padding:10px;border-radius:7px;margin-top:15px}
+.app{display:flex;min-height:100vh}.sidebar{width:235px;background:var(--nav);color:#fff;padding:20px 13px;position:fixed;top:0;bottom:0;left:0;overflow-y:auto}.brand{font-size:21px;font-weight:800;padding:3px 12px 24px}.brand span{color:#60a5fa}.role{font-size:10px;color:#94a3b8;text-transform:uppercase;padding:0 12px 8px}.nav{display:grid;gap:4px}.nav button{background:none;border:0;color:#cbd5e1;text-align:left;padding:11px 12px;border-radius:8px;cursor:pointer;font-size:13px}.nav button:hover,.nav button.active{background:#273650;color:white}.content{margin-left:235px;width:calc(100% - 235px);padding:25px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.top h1{font-size:24px;margin:0}.topright{display:flex;gap:10px;align-items:center}.pill{font-size:12px;background:white;border:1px solid var(--border);padding:9px 12px;border-radius:8px}.page{display:none}.page.active{display:block}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}.card,.panel{background:var(--card);border:1px solid var(--border);border-radius:10px}.card{padding:16px}.label{font-size:11px;color:var(--muted)}.num{font-size:26px;font-weight:800;margin-top:7px}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.blue{color:var(--accent)}.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px}.panel{padding:17px;margin-bottom:16px}.panel h2{font-size:15px;margin:0 0 14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.toolbar input,.toolbar select{padding:9px;border:1px solid #cbd5e1;border-radius:7px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 8px;border-bottom:1px solid #edf0f3;text-align:left;white-space:nowrap}th{font-size:11px;color:var(--muted)}.badge{padding:4px 8px;border-radius:20px;font-size:10px;font-weight:700}.available{background:#dcfce7;color:#166534}.rented{background:#dbeafe;color:#1d4ed8}.maintenance{background:#ffedd5;color:#c2410c}.breakdown{background:#fee2e2;color:#b91c1c}.alert{padding:11px;border-left:4px solid var(--red);background:#fff7f7;border-radius:6px;font-size:12px;margin-bottom:8px}.success{border-left-color:var(--green);background:#f0fdf4}.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.formgrid .field{margin:0}.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:18px;z-index:5}.modalbox{background:white;width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:12px;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center}.modalhead h2{margin:0}.detail{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.detail div{background:#f8fafc;border-radius:7px;padding:11px}.detail small{display:block;color:var(--muted);font-size:10px}.detail b{font-size:13px}.toast{position:fixed;right:22px;bottom:22px;background:#172033;color:white;padding:12px 15px;border-radius:8px;font-size:12px;z-index:10}.usercards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.empty{color:var(--muted);font-size:13px;padding:15px 0}.mobileonly{display:none}.dash-charts{display:grid;grid-template-columns:1fr 1.5fr;gap:16px;margin-top:16px}.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:17px}.chart-card h2{font-size:15px;margin:0 0 6px}.chart-sub{font-size:11px;color:var(--muted);margin-bottom:14px}.donut-wrap{display:flex;align-items:center;justify-content:center;gap:20px;min-height:190px}.donut{width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--accent) 0 40%,var(--green) 40% 60%,var(--orange) 60% 80%,var(--red) 80% 100%);position:relative}.donut:after{content:"";position:absolute;inset:28px;background:#fff;border-radius:50%}.legend{display:grid;gap:9px;font-size:11px}.legend-item{display:flex;align-items:center;gap:7px}.legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot-blue{background:var(--accent)}.dot-green{background:var(--green)}.dot-orange{background:var(--orange)}.dot-red{background:var(--red)}.bar-chart{display:grid;gap:12px;padding:6px 0 4px}.bar-row{display:grid;grid-template-columns:100px 1fr 38px;align-items:center;gap:10px;font-size:11px}.bar-track{height:18px;background:#eef2f7;border-radius:5px;overflow:hidden}.bar-fill{height:100%;border-radius:5px;background:var(--accent);min-width:3px}.chart-note{font-size:10px;color:var(--muted);margin-top:12px}@media(max-width:950px){.dash-charts{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.formgrid,.detail,.usercards{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.sidebar{width:190px}.content{margin-left:190px;width:calc(100% - 190px);padding:15px}.cards{grid-template-columns:1fr}.formgrid,.detail,.usercards{grid-template-columns:1fr}.top{align-items:flex-start;gap:10px}.topright .pill{display:none}}
+.oct-logo{width:100%;max-width:205px;height:auto;display:block;margin:0 auto 18px}
+.loginbox .oct-logo{max-width:290px;margin-bottom:18px}
+.brand{display:flex!important;align-items:center;gap:7px}
+.brand:before{content:"";display:none}
+.company-sub{font-size:10px;color:#94a3b8;margin:-18px 12px 18px}
+.btn.primary,.primary{background:#0878c9!important}
+.brand span{color:#ed1b2f!important}
+.muted{color:var(--muted);font-size:12px}
+.rowbtns{display:flex;gap:6px}.btn.mini{padding:6px 10px;font-size:11px}
+.filelink{color:var(--accent);cursor:pointer;text-decoration:underline}
+.hint{font-size:11px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="loginbox">
+    <img class="oct-logo" src="Ottawa Logo Login.png" alt="Ottawa Cont. & Trading W.L.L. logo" onerror="this.style.display='none'">
+    <div class="logo">Fleet<span> Management</span> Portal</div>
+    <div class="sub">Equipment Rental & Fleet Management</div>
+    <div class="field"><label>Username</label><input id="username" value="admin"></div>
+    <div class="field"><label>Password</label><input id="password" type="password" value="admin123" onkeydown="if(event.key==='Enter')login()"></div>
+    <div class="field"><label>Portal</label>
+      <select id="portal"><option value="admin">Admin Portal</option><option value="user">User / Staff Portal</option></select>
+    </div>
+    <button class="btn primary" onclick="login()">Sign in</button>
+    <div class="demo">Demo accounts: admin / admin123 &nbsp; | &nbsp; staff / staff123</div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="sidebar">
+  <img class="oct-logo" src="Ottawa Logo.png" alt="Ottawa Cont. & Trading W.L.L. logo" onerror="this.style.display='none'">
+  <div class="brand"><span style="color:#ed1b2f">Contracting & Trading</span><span></span></div>
+  <div id="roleLabel" class="role">Administrator</div>
+  <div id="nav" class="nav"></div>
+  <button class="btn secondary" style="margin:18px 12px;width:calc(100% - 24px)" onclick="logout()">Sign out</button>
+</aside>
+<main class="content">
+  <div class="top"><h1 id="pageTitle">Dashboard</h1><div class="topright"><div class="pill" id="datePill"></div><div class="pill" id="userPill"></div></div></div>
+  <div id="pages"></div>
+</main>
+</div>
+
+<div id="modal" class="modal hidden"><div class="modalbox"><div class="modalhead"><h2 id="modalTitle"></h2><button class="btn secondary" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<!-- Shared cloud database (Supabase). Safe to leave as-is: app runs in local mode until keys are added below. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   O.C.T. FleetPro V2 — data + persistence layer
+   - Structured records: saved in localStorage (survives refresh)
+   - Uploaded files: saved in IndexedDB (survives refresh)
+   ============================================================ */
+
+const STORAGE_KEY = "octfleetpro.v2";
+
+/* ============================================================
+   SHARED CLOUD DATABASE (Supabase) — vehicle records + images
+   ------------------------------------------------------------
+   To turn on shared mode (everyone sees the same data):
+   1. Create a free project at https://supabase.com
+   2. Run the SQL from SETUP-BACKEND.md (creates the table + bucket)
+   3. Paste your Project URL and publishable/anon key below.
+   Until you do, the app runs in LOCAL mode (this browser only).
+   ============================================================ */
+const SUPABASE_URL = "YOUR_SUPABASE_URL";              // e.g. https://abcd1234.supabase.co
+const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";  // the publishable / anon key (safe for the browser)
+const VEHICLE_BUCKET = "vehicle-images";               // storage bucket name (created in setup)
+
+var sb = null, CLOUD = false;
+function initCloud(){
+ try{
+  if(window.supabase && typeof SUPABASE_URL==="string" && SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("YOUR_") && !SUPABASE_KEY.includes("YOUR_")){
+   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+   CLOUD = true;
+  }
+ }catch(e){ console.warn("Cloud init failed, using local mode:", e); CLOUD=false; }
+}
+
+/* ---- cloud data-access layer (vehicle records) ---- */
+async function vehiclesLoad(){
+ const { data, error } = await sb.from("vehicle_records").select("id,record").order("updated_at",{ascending:false});
+ if(error) throw error;
+ state.vehicleRecords = (data||[]).map(r=>({ _id:r.id, ...(r.record||{}) }));
+}
+async function vehicleCreate(rec){
+ const clean={...rec}; delete clean._id;
+ const { data, error } = await sb.from("vehicle_records").insert({record:clean}).select("id").single();
+ if(error) throw error; return data.id;
+}
+async function vehicleUpdate(id,rec){
+ const clean={...rec}; delete clean._id;
+ const { error } = await sb.from("vehicle_records").update({record:clean, updated_at:new Date().toISOString()}).eq("id",id);
+ if(error) throw error;
+}
+async function vehicleRemove(id){
+ const { error } = await sb.from("vehicle_records").delete().eq("id",id);
+ if(error) throw error;
+}
+/* upload one file to Storage, return {name,url} */
+async function cloudUpload(file){
+ const path = Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+file.name.replace(/[^\w.\-]/g,"_");
+ const { error } = await sb.storage.from(VEHICLE_BUCKET).upload(path, file, {upsert:true, cacheControl:"3600"});
+ if(error) throw error;
+ const { data } = sb.storage.from(VEHICLE_BUCKET).getPublicUrl(path);
+ return { name:file.name, url:data.publicUrl };
+}
+/* grab files from an <input> — cloud: upload & return {name,url}; local: IndexedDB {id,name} */
+async function grabFiles(input){
+ if(!input || !input.files || !input.files.length) return [];
+ if(CLOUD){ const out=[]; for(const f of Array.from(input.files)) out.push(await cloudUpload(f)); return out; }
+ return await captureFiles(input);
+}
+async function grabImage(input){ const a = await grabFiles(input); return a[0]||null; }
+/* refresh vehicle table (+dashboard) from the cloud */
+async function refreshVehicles(){
+ if(CLOUD){ try{ await vehiclesLoad(); }catch(err){ console.error(err); toast("⚠ Could not load cloud data: "+(err.message||err)); } }
+ render_vehicleRecords(); renderDashboard();
+}
+function deleteVehicle(id){
+ if(!confirm("Delete this vehicle record"+(CLOUD?" for everyone":"")+"? This cannot be undone.")) return;
+ (async()=>{
+  try{
+   if(CLOUD){ await vehicleRemove(id); await refreshVehicles(); }
+   else { state.vehicleRecords=state.vehicleRecords.filter(r=>r._id!==id); saveState(); renderAll(); }
+   toast("Vehicle record deleted"+(CLOUD?" (shared)":"")+" ✓");
+  }catch(err){ console.error(err); toast("⚠ Delete failed: "+(err.message||err)); }
+ })();
+}
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+/* -------- default (demo) data — used only on first ever load -------- */
+function defaultState(){return{
+ role:null,user:null,
+ fleet:[
+  {id:"70-45821",cat:"Excavator",clientName:"ABC Contracting",vehicleBrand:"CAT",vehicleType:"Excavator",vehicleSize:"20T",projectName:"Lusail Marina Phase 2",location:"Lusail",projectStart:"2026-08-01",projectEnd:"2026-11-30",projectStatus:"On Going",startReading:"4820",endReading:"",workDate:"2026-08-27",workingHours:"8",breakdownTime:"1",comments:"Assigned to earthworks package.",breakdownComments:"Minor hose leak, resolved on site.",archived:false},
+  {id:"70-33210",cat:"Excavator",clientName:"Internal",vehicleBrand:"Komatsu",vehicleType:"Excavator",vehicleSize:"21T",projectName:"Depot Standby",location:"Doha Garage",projectStart:"2026-07-15",projectEnd:"",projectStatus:"Started",startReading:"5110",endReading:"",workDate:"",workingHours:"0",breakdownTime:"0",comments:"",breakdownComments:"",archived:false},
+  {id:"88-14002",cat:"Wheel Loader",clientName:"Gulf Builders",vehicleBrand:"CAT",vehicleType:"Wheel Loader",vehicleSize:"950",projectName:"West Bay Loading",location:"West Bay",projectStart:"2026-06-01",projectEnd:"2026-08-20",projectStatus:"Closed",startReading:"6100",endReading:"6410",workDate:"2026-08-20",workingHours:"6",breakdownTime:"0",comments:"Completed and returned to yard.",breakdownComments:"",archived:false},
+  {id:"55-77103",cat:"Generator",clientName:"Gulf Builders",vehicleBrand:"Perkins",vehicleType:"Generator",vehicleSize:"500KVA",projectName:"Industrial Area Power",location:"Industrial Area",projectStart:"2026-08-10",projectEnd:"2026-12-10",projectStatus:"On Going",startReading:"2180",endReading:"",workDate:"2026-08-27",workingHours:"12",breakdownTime:"0",comments:"500KVA unit on hire.",breakdownComments:"",archived:false},
+  {id:"41-90551",cat:"Forklift",clientName:"Delta Logistics",vehicleBrand:"Toyota",vehicleType:"Forklift",vehicleSize:"8T",projectName:"Warehouse Ops",location:"Industrial Area",projectStart:"2026-05-01",projectEnd:"2026-07-31",projectStatus:"Closed",startReading:"7000",endReading:"7140",workDate:"2026-07-31",workingHours:"5",breakdownTime:"3",comments:"",breakdownComments:"Transmission fault at end of hire.",archived:true}
+ ],
+ rentals:[
+  {no:"CN-1025",customer:"ABC Contracting",fleet:"70-45821",vehicleBrand:"CAT",vehicleType:"Excavator",vehicleSize:"20T",site:"Lusail",start:"2026-08-01",end:"2026-09-30",startReading:"4800",endReading:"",totalAmount:36000,partialPayment:15000,status:"Partial payment received",archived:false},
+  {no:"CN-1031",customer:"Gulf Builders",fleet:"55-77103",vehicleBrand:"Perkins",vehicleType:"Generator",vehicleSize:"500KVA",site:"West Bay",start:"2026-08-15",end:"2026-11-15",startReading:"2100",endReading:"",totalAmount:28500,partialPayment:0,status:"Active",archived:false}
+ ],
+ timesheet:[
+  {date:"2026-08-27",vehicleName:"70-45821",vehicleType:"Excavator",workingHours:"8",breakdownHours:"1",breakdownComments:"Hydraulic hose leak, fixed on site.",archived:false},
+  {date:"2026-08-27",vehicleName:"55-77103",vehicleType:"Generator",workingHours:"12",breakdownHours:"0",breakdownComments:"",archived:false},
+  {date:"2026-08-26",vehicleName:"88-14002",vehicleType:"Wheel Loader",workingHours:"6",breakdownHours:"0",breakdownComments:"",archived:false}
+ ],
+ breakdowns:[
+  {no:"BD-2026-00125",fleet:"70-45821",date:"2026-08-25",location:"Lusail",severity:"Medium",reason:"Hydraulic hose failure",hours:"6",status:"Closed"},
+  {no:"BD-2026-00131",fleet:"41-90551",date:"2026-08-27",location:"Industrial Area",severity:"High",reason:"Transmission failure",hours:"2",status:"Open"}
+ ],
+ maintenance:[
+  {fleet:"70-45821",service:"Engine Oil & Filters",interval:"500 hrs",current:"4820",next:"5000",tech:"Ahmed",status:"Due Soon"},
+  {fleet:"88-14002",service:"Full 1,000 hr Service",interval:"1,000 hrs",current:"6210",next:"6000",tech:"Rashid",status:"Overdue"},
+  {fleet:"55-77103",service:"Generator Inspection",interval:"250 hrs",current:"2180",next:"2250",tech:"Imran",status:"Scheduled"}
+ ],
+ workshop:[
+  {no:"WO-2026-00451",fleet:"70-45821",job:"Replace hydraulic hose",tech:"Ahmed",parts:"Hydraulic hose",cost:"QAR 1,100",status:"Completed"},
+  {no:"WO-2026-00458",fleet:"41-90551",job:"Transmission diagnosis",tech:"Rashid",parts:"Pending",cost:"",status:"In Progress"}
+ ],
+ locations:[
+  {datetime:"2026-08-27 08:00",fleet:"70-45821",location:"Doha Garage",event:"Departed",hours:"4812"},
+  {datetime:"2026-08-27 09:15",fleet:"70-45821",location:"Lusail Project",event:"Arrived",hours:"4815"},
+  {datetime:"2026-08-27 12:30",fleet:"70-45821",location:"Lusail Project",event:"Operating",hours:"4820"}
+ ],
+ garageInventory:[
+  {no:"HYD-4421",item:"Hydraulic Hose",cat:"Hydraulic",qty:2,min:5,unit:"Nos",location:"Main Garage",supplier:"Local Supplier"},
+  {no:"FLT-1102",item:"Oil Filter",cat:"Filters",qty:28,min:10,unit:"Nos",location:"Main Garage",supplier:"Gulf Parts"}
+ ],
+ staff:[
+  {id:"ST-001",name:"Ahmed Khan",passport:"P1234567",passportExpiry:"2028-06-15",license:"DL-45821",licenseExpiry:"2027-12-15",designation:"Heavy Equipment Operator",phone:"+974 5000 1001",status:"Active",docFiles:[]},
+  {id:"ST-002",name:"Rashid Ali",passport:"P2345678",passportExpiry:"2029-03-22",license:"DL-56214",licenseExpiry:"2027-03-22",designation:"Mechanic",phone:"+974 5000 1002",status:"Active",docFiles:[]}
+ ],
+ vehicleRecords:[
+  {fleet:"70-45821",registration:"QTR-45821",vin:"CAT320-2022-001",insurancePolicy:"INS-2026-45821",insuranceExpiry:"2026-11-30",registrationExpiry:"2027-01-31",inspectionExpiry:"2026-12-15",purchaseDate:"2022-01-10",docFiles:[]},
+  {fleet:"55-77103",registration:"QTR-77103",vin:"PERKINS-500-007",insurancePolicy:"INS-2026-77103",insuranceExpiry:"2026-12-20",registrationExpiry:"2027-02-28",inspectionExpiry:"2027-01-10",purchaseDate:"2023-05-18",docFiles:[]}
+ ],
+ documents:[
+  {operatorName:"Ahmed Khan",passport:null,qid:null,license:null,tuv:null,health:null,other1:null,other2:null,other1Label:"",other2Label:""},
+  {operatorName:"Rashid Ali",passport:null,qid:null,license:null,tuv:null,health:null,other1:null,other2:null,other1Label:"",other2Label:""}
+ ],
+ users:[
+  {username:"admin",name:"System Administrator",role:"Administrator",email:"admin@oct.qa",phone:"+974 5000 0001",status:"Active"},
+  {username:"staff",name:"Staff User",role:"Staff / Operator",email:"staff@oct.qa",phone:"+974 5000 0002",status:"Active"}
+ ]
+}}
+
+/* ---------------- load / save ---------------- */
+var state = loadState();
+
+function loadState(){
+ let base = defaultState();
+ try{
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+   const saved = JSON.parse(raw);
+   // merge: keep default structure, override with saved collections
+   for(const k of Object.keys(base)){
+    if(Array.isArray(base[k]) && Array.isArray(saved[k])) base[k]=saved[k];
+   }
+  }
+ }catch(e){console.warn("Could not load saved data:",e)}
+ // never persist the live session role
+ base.role=null; base.user=null;
+ base.views={fleet:"active",rentals:"active",timesheet:"active"};
+ ensureIds(base);
+ return base;
+}
+function ensureIds(s){
+ ["fleet","rentals","breakdowns","maintenance","workshop","locations","garageInventory","staff","vehicleRecords","documents","users","timesheet"].forEach(coll=>{
+  (s[coll]||[]).forEach(r=>{ if(!r._id) r._id=uid(); });
+ });
+}
+function saveState(){
+ try{
+  const copy={};
+  ["fleet","rentals","breakdowns","maintenance","workshop","locations","garageInventory","staff","vehicleRecords","documents","users","timesheet"].forEach(k=>copy[k]=state[k]);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(copy));
+ }catch(e){
+  toast("⚠ Could not save (storage full). Export a backup.");
+  console.error(e);
+ }
+}
+
+/* ---------------- IndexedDB file store ---------------- */
+let _db=null;
+function openDB(){return new Promise((res,rej)=>{if(_db)return res(_db);let r;try{r=indexedDB.open("octfleetpro_files",1)}catch(e){return rej(e)}r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains("files"))r.result.createObjectStore("files")};r.onsuccess=()=>{_db=r.result;res(_db)};r.onerror=()=>rej(r.error)})}
+async function idbPut(id,blob){try{const db=await openDB();return await new Promise((res,rej)=>{const tx=db.transaction("files","readwrite");tx.objectStore("files").put(blob,id);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)})}catch(e){console.warn("file store failed",e);return false}}
+async function idbGet(id){try{const db=await openDB();return await new Promise(res=>{const tx=db.transaction("files","readonly");const rq=tx.objectStore("files").get(id);rq.onsuccess=()=>res(rq.result||null);rq.onerror=()=>res(null)})}catch(e){return null}}
+async function captureFiles(inputEl){const out=[];if(!inputEl||!inputEl.files||!inputEl.files.length)return out;for(const f of Array.from(inputEl.files)){const id=uid();const ok=await idbPut(id,f);out.push({id:ok?id:null,name:f.name,type:f.type,size:f.size})}return out}
+async function openFile(id){const blob=await idbGet(id);if(!blob){toast("File not available (stored on a different browser/device)");return}const url=URL.createObjectURL(blob);window.open(url,"_blank");setTimeout(()=>URL.revokeObjectURL(url),60000)}
+function fileLinks(arr){if(!arr||!arr.length)return "—";return arr.map(f=>{if(f&&f.url)return `<a class="filelink" href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.name)}</a>`;if(f&&f.id)return `<span class="filelink" onclick="openFile('${f.id}')">${esc(f.name)}</span>`;return esc(f&&f.name||f)}).join(", ")}
+
+/* ---------------- navigation config ---------------- */
+const adminNav=[["dashboard","🏠 Dashboard"],["fleet","📁 Projects"],["rentals","📋 Rentals"],["timesheet","🗓️ Timesheet"],["maintenance","🔧 Maintenance"],["breakdowns","🚨 Breakdowns"],["workshop","🛠️ Workshop"],["locations","📍 Locations"],["inventory","📦 Garage Inventory"],["staff","👥 Staff"],["vehicleRecords","🚘 Vehicle Records"],["documents","📄 Operator Documents"],["reports","📊 Reports"],["users","👤 Users"]];
+const userNav=[["userdash","🏠 My Dashboard"],["myfleet","📁 My Projects"],["report","🚨 Report Breakdown"],["mymain","🔧 Maintenance"],["profile","👤 My Profile"]];
+const titles={dashboard:"Dashboard",fleet:"Projects",rentals:"Rental Management",timesheet:"Timesheet",maintenance:"Preventive Maintenance",breakdowns:"Breakdown Management",workshop:"Workshop & Repairs",locations:"Location History",inventory:"Garage Inventory",staff:"Staff Records",vehicleRecords:"Vehicle Records",documents:"Operator Documents",reports:"Management Reports",users:"User Management",userdash:"My Dashboard",myfleet:"My Projects",report:"Report Breakdown",mymain:"My Maintenance",profile:"My Profile"};
+
+/* pageId -> state collection name (for generic CSV export) */
+const pageColl={fleet:"fleet",rentals:"rentals",timesheet:"timesheet",maintenance:"maintenance",breakdowns:"breakdowns",workshop:"workshop",locations:"locations",inventory:"garageInventory",staff:"staff",vehicleRecords:"vehicleRecords",documents:"documents",users:"users"};
+
+/* ---------------- auth ---------------- */
+function login(){
+ const p=document.getElementById("portal").value,u=document.getElementById("username").value.trim(),pw=document.getElementById("password").value;
+ if((p==="admin"&&u==="admin"&&pw==="admin123")||(p==="user"&&u==="staff"&&pw==="staff123")){
+  state.role=p;state.user=u;
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  buildNav();buildPages();
+  showPage(p==="admin"?"dashboard":"userdash");
+  document.getElementById("datePill").textContent=new Date().toLocaleDateString();
+  document.getElementById("userPill").textContent=(p==="admin"?"Administrator":"Staff User");
+  if(CLOUD) refreshVehicles();
+ }else alert("Invalid demo credentials.");
+}
+function logout(){state.role=null;document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden")}
+function buildNav(){document.getElementById("roleLabel").textContent=state.role==="admin"?"Administrator":"Staff / User";document.getElementById("nav").innerHTML=(state.role==="admin"?adminNav:userNav).map(x=>`<button data-page="${x[0]}" onclick="showPage('${x[0]}')">${x[1]}</button>`).join("")}
+function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));let el=document.getElementById(id);if(el)el.classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===id));document.getElementById("pageTitle").textContent=titles[id]||"FleetPro";if(id==="vehicleRecords"&&CLOUD)refreshVehicles()}
+
+/* ---------------- helpers ---------------- */
+function badge(s){s=s||"";let l=s.toLowerCase();let c=l.includes("break")||l.includes("overdue")||l.includes("expired")||s==="Open"?"breakdown":l.includes("rent")||s==="Active"||l.includes("progress")?"rented":l.includes("maint")||l.includes("due")||l.includes("expir")||l.includes("scheduled")||l.includes("low")?"maintenance":"available";return `<span class="badge ${c}">${esc(s)}</span>`}
+/* project status badge: Started(orange) / On Going(blue) / Closed(green) */
+function projBadge(s){s=s||"—";let l=s.toLowerCase();let c=l.includes("going")?"rented":l.includes("clos")?"available":l.includes("start")?"maintenance":"available";return `<span class="badge ${c}">${esc(s)}</span>`}
+/* payment status badge: Active(blue) / Partial(orange) / Payment received(green) */
+function payBadge(s){s=s||"—";let l=s.toLowerCase();let c=l.includes("partial")?"maintenance":l.includes("received")&&!l.includes("partial")?"available":"rented";return `<span class="badge ${c}">${esc(s)}</span>`}
+/* money helpers */
+function amt(v){if(v==null)return 0;let n=parseFloat(String(v).replace(/[^0-9.\-]/g,""));return isNaN(n)?0:n}
+function money(n){return "QAR "+Math.round(n).toLocaleString()}
+/* selection + archive (Projects & Rentals) */
+function toggleAll(bodyId,src){document.querySelectorAll("#"+bodyId+" .rowchk").forEach(c=>{c.checked=src.checked})}
+function curView(coll){return (state.views&&state.views[coll])||"active"}
+function setView(coll,mode){if(!state.views)state.views={};state.views[coll]=mode;renderAll()}
+function moveSelected(coll,bodyId,toArchived){const ids=Array.from(document.querySelectorAll("#"+bodyId+" .rowchk:checked")).map(c=>c.dataset.id);if(!ids.length){toast("Tick at least one row first");return}ids.forEach(id=>{let r=find(coll,id);if(r)r.archived=toArchived});saveState();renderAll();toast(ids.length+" moved to "+(toArchived?"Archive":"Active"))}
+function viewToggle(coll){let current=curView(coll);return `<div style="display:inline-flex;gap:4px"><button class="btn ${current==="active"?"primary":"secondary"} mini" onclick="setView('${coll}','active')">Active</button><button class="btn ${current==="archived"?"primary":"secondary"} mini" onclick="setView('${coll}','archived')">Archived</button></div>`}
+function moveBtn(coll,bodyId){return curView(coll)==="active"?`<button class="btn secondary" onclick="moveSelected('${coll}','${bodyId}',true)">Move to Archive ▸</button>`:`<button class="btn secondary" onclick="moveSelected('${coll}','${bodyId}',false)">◂ Move to Active</button>`}
+function opts(list,sel){return list.map(v=>`<option ${v===sel?"selected":""}>${esc(v)}</option>`).join("")}
+function fleetOpts(sel){return state.fleet.map(f=>`<option ${f.id===sel?"selected":""}>${esc(f.id)}</option>`).join("")}
+function find(coll,id){return state[coll].find(r=>r._id===id)}
+function del(coll,id){if(!confirm("Delete this record permanently?"))return;state[coll]=state[coll].filter(r=>r._id!==id);saveState();renderAll();toast("Record deleted")}
+function actionBtns(coll,id,editFn){return `<div class="rowbtns"><button class="btn secondary mini" onclick="${editFn}('${id}')">Edit</button><button class="btn danger mini" onclick="del('${coll}','${id}')">Delete</button></div>`}
+function daysLeft(dateStr){if(!dateStr)return null;let t=Date.parse(dateStr);if(isNaN(t))return null;return Math.ceil((t-Date.now())/86400000)}
+function docStatus(dateStr){let d=daysLeft(dateStr);if(d==null)return "Valid";if(d<0)return "Expired";if(d<=30)return "Expiring Soon";return "Valid"}
+
+/* ---------------- build page shells ---------------- */
+function buildPages(){
+document.getElementById("pages").innerHTML=`
+<section id="dashboard" class="page"></section>
+<section id="fleet" class="page"></section>
+<section id="rentals" class="page"></section>
+<section id="timesheet" class="page"></section>
+<section id="maintenance" class="page"></section>
+<section id="breakdowns" class="page"></section>
+<section id="workshop" class="page"></section>
+<section id="locations" class="page"></section>
+<section id="inventory" class="page"></section>
+<section id="staff" class="page"></section>
+<section id="vehicleRecords" class="page"></section>
+<section id="documents" class="page"></section>
+<section id="reports" class="page"></section>
+<section id="users" class="page"></section>
+<section id="userdash" class="page"></section>
+<section id="myfleet" class="page"></section>
+<section id="report" class="page"></section>
+<section id="mymain" class="page"></section>
+<section id="profile" class="page"></section>`;
+renderAll();
+}
+
+function toolbar(pageId,searchPh,addLabel,addFn){
+ return `<div class="toolbar">
+  <input id="${pageId}Search" placeholder="${searchPh}" oninput="render_${pageId}()">
+  ${addLabel?`<button class="btn primary" onclick="${addFn}">${addLabel}</button>`:""}
+  <button class="btn secondary" onclick="exportCSV('${pageId}')">Export CSV</button>
+ </div>`;
+}
+function tableShell(pageId,heads){return `<div class="tablewrap"><table><thead><tr>${heads.map(h=>`<th>${esc(h)}</th>`).join("")}<th>Actions</th></tr></thead><tbody id="${pageId}Rows"></tbody></table></div>`}
+function filterRows(coll,pageId){let q=(document.getElementById(pageId+"Search")?.value||"").toLowerCase();return state[coll].filter(r=>Object.entries(r).filter(([k])=>k!=="_id"&&k!=="docFiles").map(([,v])=>v).join(" ").toLowerCase().includes(q))}
+function emptyRow(n){return `<tr><td colspan="${n}" class="empty">No records yet. Use the “Add” button above.</td></tr>`}
+
+/* ---------------- master render ---------------- */
+function renderAll(){
+ renderDashboard();
+ // ADMIN pages
+ document.getElementById("fleet").innerHTML=`<div class="panel"><h2>Projects</h2>
+  <div class="toolbar">
+   ${viewToggle("fleet")}
+   <input id="fleetSearch" placeholder="Search plate / client / vehicle / project" oninput="render_fleet()">
+   <button class="btn primary" onclick="openProject()">+ Add Project</button>
+   <button class="btn secondary" onclick="exportCSV('fleet')">Export CSV</button>
+   <div style="margin-left:auto">${moveBtn("fleet","fleetRows")}</div>
+  </div>
+  <div class="tablewrap"><table><thead><tr>
+   <th style="width:26px"><input type="checkbox" onclick="toggleAll('fleetRows',this)"></th>
+   <th>Plate No</th><th>Client Name</th><th>Vehicle Brand</th><th>Vehicle Type</th><th>Vehicle Size</th><th>Project Name</th><th>Location</th><th>Start Date</th><th>End Date</th><th>Status</th><th>Comments</th><th>Actions</th>
+  </tr></thead><tbody id="fleetRows"></tbody></table></div></div>`;
+ document.getElementById("rentals").innerHTML=`<div class="panel"><h2>Rental Contracts</h2>
+  <div class="toolbar">
+   ${viewToggle("rentals")}
+   <input id="rentalsSearch" placeholder="Search contract / client / plate" oninput="render_rentals()">
+   <button class="btn primary" onclick="openRental()">+ New Rental</button>
+   <button class="btn secondary" onclick="exportCSV('rentals')">Export CSV</button>
+   <div style="margin-left:auto">${moveBtn("rentals","rentalsRows")}</div>
+  </div>
+  <div class="tablewrap"><table><thead><tr>
+   <th style="width:26px"><input type="checkbox" onclick="toggleAll('rentalsRows',this)"></th>
+   <th>Contract</th><th>Client Name</th><th>Plate No</th><th>Vehicle Brand</th><th>Vehicle Type</th><th>Vehicle Size</th><th>Site</th><th>Start</th><th>Return</th><th>Start Rdg</th><th>End Rdg</th><th>Total Amount</th><th>Partial Received</th><th>Remaining</th><th>Status</th><th>Actions</th>
+  </tr></thead><tbody id="rentalsRows"></tbody></table></div></div>`;
+ document.getElementById("timesheet").innerHTML=`<div class="panel"><h2>Timesheet</h2>
+  <div class="toolbar">
+   ${viewToggle("timesheet")}
+   <input id="timesheetSearch" placeholder="Search vehicle / type / comments" oninput="render_timesheet()">
+   <button class="btn primary" onclick="openTimesheet()">+ Add Entry</button>
+   <button class="btn secondary" onclick="exportCSV('timesheet')">Export CSV</button>
+   <div style="margin-left:auto">${moveBtn("timesheet","timesheetRows")}</div>
+  </div>
+  <div class="tablewrap"><table><thead><tr>
+   <th style="width:26px"><input type="checkbox" onclick="toggleAll('timesheetRows',this)"></th>
+   <th>Date</th><th>Vehicle Name</th><th>Vehicle Type</th><th>Hours of Working</th><th>Hours of Breakdown</th><th>Breakdown Comments</th><th>Actions</th>
+  </tr></thead><tbody id="timesheetRows"></tbody></table></div></div>`;
+ document.getElementById("maintenance").innerHTML=`<div class="panel"><h2>Preventive Maintenance</h2>${toolbar("maintenance","Search fleet / service / technician","+ Schedule Service","openMaintenance()")}${tableShell("maintenance",["Fleet","Service","Interval","Current Hrs","Next Due","Technician","Status"])}</div>`;
+ document.getElementById("breakdowns").innerHTML=`<div class="panel"><h2>Breakdown Register</h2>${toolbar("breakdowns","Search fleet / reason / status","+ Report Breakdown","openBreakdown()")}${tableShell("breakdowns",["No.","Fleet","Date","Location","Severity","Reason","Downtime","Status"])}</div>`;
+ document.getElementById("workshop").innerHTML=`<div class="panel"><h2>Workshop Work Orders</h2>${toolbar("workshop","Search WO / fleet / job","+ New Work Order","openWorkshop()")}${tableShell("workshop",["WO No.","Fleet","Job","Technician","Parts","Cost","Status"])}</div>`;
+ document.getElementById("locations").innerHTML=`<div class="panel"><h2>Location History</h2>${toolbar("locations","Search fleet / location / event","+ Add Location Log","openLocation()")}${tableShell("locations",["Date/Time","Fleet","Location","Event","Engine Hrs"])}</div>`;
+ document.getElementById("inventory").innerHTML=`<div class="panel"><h2>Garage Inventory</h2>${toolbar("inventory","Search item / part / category","+ Add Stock Item","openInventory()")}${tableShell("inventory",["Part No.","Item","Category","Qty","Minimum","Unit","Garage Location","Supplier","Status"])}</div>`;
+ document.getElementById("staff").innerHTML=`<div class="panel"><h2>Staff Records</h2>${toolbar("staff","Search staff / passport / designation","+ Add Staff","openStaff()")}${tableShell("staff",["Staff ID","Name","Passport No.","License No.","License Expiry","Designation","Phone","Documents","Status"])}</div>`;
+ document.getElementById("vehicleRecords").innerHTML=`<div class="panel"><h2>Vehicle Records</h2><div class="hint" style="margin-bottom:10px">${CLOUD?'☁ Connected to the shared cloud database — records and images are visible to all users. <button class="btn secondary mini" style="margin-left:6px" onclick="refreshVehicles()">↻ Refresh</button>':'💾 Local mode (saved only in this browser). Add your Supabase keys in the code to share across users.'}</div>${toolbar("vehicleRecords","Search fleet / registration / VIN","+ Add Vehicle Record","openVehicle()")}${tableShell("vehicleRecords",["Fleet ID","Registration","VIN / Serial","Insurance Policy","Insurance Exp.","Registration Exp.","Inspection Exp.","Purchase Date","Documents"])}</div>`;
+ document.getElementById("documents").innerHTML=`<div class="panel"><h2>Operator Documents</h2>
+  <div class="toolbar">
+   <input id="documentsSearch" placeholder="Search operator name" oninput="render_documents()">
+   <button class="btn primary" onclick="openDocument()">+ Add Operator</button>
+   <button class="btn secondary" onclick="exportCSV('documents')">Export CSV</button>
+   <div style="margin-left:auto"><button class="btn danger" onclick="deleteSelected('documents','documentsRows')">Delete Selected</button></div>
+  </div>
+  <div class="tablewrap"><table><thead><tr>
+   <th style="width:26px"><input type="checkbox" onclick="toggleAll('documentsRows',this)"></th>
+   <th>Operator Name</th><th>Documents Uploaded</th><th>Actions</th>
+  </tr></thead><tbody id="documentsRows"></tbody></table></div></div>`;
+ document.getElementById("users").innerHTML=`<div class="panel"><h2>User Management</h2>${toolbar("users","Search user / role","+ Add User","openUser()")}${tableShell("users",["Username","Name","Role","Email","Phone","Status"])}</div>`;
+ renderReports();
+
+ // USER pages
+ document.getElementById("userdash").innerHTML=userDash();
+ document.getElementById("myfleet").innerHTML=`<div class="panel"><h2>My Assigned Equipment</h2>${fleetTable(true)}</div>`;
+ document.getElementById("report").innerHTML=reportBreakdownForm();
+ document.getElementById("mymain").innerHTML=`<div class="panel"><h2>My Maintenance</h2><div class="tablewrap"><table><thead><tr><th>Fleet</th><th>Service</th><th>Current Hrs</th><th>Next Due</th><th>Status</th></tr></thead><tbody>${state.maintenance.map(r=>`<tr><td>${esc(r.fleet)}</td><td>${esc(r.service)}</td><td>${esc(r.current)}</td><td>${esc(r.next)}</td><td>${badge(r.status)}</td></tr>`).join("")||emptyRow(5)}</tbody></table></div></div>`;
+ document.getElementById("profile").innerHTML=`<div class="panel"><h2>My Profile</h2><div class="detail"><div><small>Name</small><b>Staff User</b></div><div><small>Role</small><b>Operator / Staff</b></div><div><small>Department</small><b>Garage Operations</b></div></div></div>`;
+
+ // populate all searchable tables
+ render_fleet();render_rentals();render_timesheet();render_maintenance();render_breakdowns();render_workshop();render_locations();render_inventory();render_staff();render_vehicleRecords();render_documents();render_users();
+}
+
+/* ---------------- dashboard ---------------- */
+function renderDashboard(){
+ const list=state.fleet.filter(f=>!f.archived);
+ const total=list.length,
+   started=list.filter(x=>x.projectStatus==="Started").length,
+   going=list.filter(x=>x.projectStatus==="On Going").length,
+   closed=list.filter(x=>x.projectStatus==="Closed").length,
+   archived=state.fleet.filter(f=>f.archived).length;
+ const maxStatus=Math.max(started,going,closed,1), totalStatus=started+going+closed||1;
+ const stPct=Math.round(started/totalStatus*100),goPct=Math.round(going/totalStatus*100);
+ const donutStyle=`background:conic-gradient(var(--orange) 0 ${stPct}%,var(--accent) ${stPct}% ${stPct+goPct}%,var(--green) ${stPct+goPct}% 100%)`;
+ document.getElementById("dashboard").innerHTML=`<div class="cards">
+ <div class="card"><div class="label">TOTAL PROJECTS</div><div class="num">${total}</div></div>
+ <div class="card"><div class="label">STARTED</div><div class="num orange">${started}</div></div>
+ <div class="card"><div class="label">ON GOING</div><div class="num blue">${going}</div></div>
+ <div class="card"><div class="label">CLOSED</div><div class="num green">${closed}</div></div>
+ <div class="card"><div class="label">ARCHIVED</div><div class="num">${archived}</div></div></div>
+ <div class="dash-charts">
+  <div class="chart-card"><h2>Project Status Distribution</h2><div class="chart-sub">Active projects by current status</div><div class="donut-wrap"><div class="donut" style="${donutStyle}"></div><div class="legend"><div class="legend-item"><span class="legend-dot dot-orange"></span>Started: ${started}</div><div class="legend-item"><span class="legend-dot dot-blue"></span>On Going: ${going}</div><div class="legend-item"><span class="legend-dot dot-green"></span>Closed: ${closed}</div></div></div></div>
+  <div class="chart-card"><h2>Projects by Status</h2><div class="chart-sub">Count of active projects per status</div><div class="bar-chart">
+   <div class="bar-row"><span>Started</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,started/maxStatus*100)}%"></div></div><b>${started}</b></div>
+   <div class="bar-row"><span>On Going</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,going/maxStatus*100)}%"></div></div><b>${going}</b></div>
+   <div class="bar-row"><span>Closed</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,closed/maxStatus*100)}%"></div></div><b>${closed}</b></div>
+  </div><div class="chart-note">Charts update automatically when projects change.</div></div>
+ </div>
+ <div class="grid">
+  <div>
+   <div class="panel"><h2>Projects Overview</h2>${fleetTable()}</div>
+  </div>
+  <div><div class="panel"><h2>Alerts</h2>${buildAlerts()}</div></div>
+ </div>`;
+}
+function buildAlerts(){
+ let a=[];
+ state.breakdowns.filter(b=>b.status!=="Closed").forEach(b=>a.push(["red",`${b.fleet} — ${b.reason}`]));
+ state.maintenance.filter(m=>/overdue/i.test(m.status)).forEach(m=>a.push(["orange",`${m.fleet} — ${m.service} overdue`]));
+ state.maintenance.filter(m=>/due/i.test(m.status)).forEach(m=>a.push(["orange",`${m.fleet} — ${m.service} due soon`]));
+ state.documents.forEach(d=>{let dl=daysLeft(d.expiry);if(dl!=null&&dl<=30)a.push(["orange",`${d.fleet} — ${d.doc} ${dl<0?"expired":"expires in "+dl+" days"}`])});
+ state.vehicleRecords.forEach(v=>{let dl=daysLeft(v.insuranceExpiry);if(dl!=null&&dl<=30)a.push(["orange",`${v.fleet} — insurance ${dl<0?"expired":"expires in "+dl+" days"}`])});
+ state.garageInventory.filter(i=>Number(i.qty)<Number(i.min)).forEach(i=>a.push(["orange",`${i.item} — low stock (${i.qty}/${i.min})`]));
+ if(!a.length)return `<div class="alert success">🟢 No critical alerts. All systems normal.</div>`;
+ return a.slice(0,12).map(([c,t])=>`<div class="alert ${c==="red"?"":"success"}" style="${c==="orange"?"border-left-color:var(--orange);background:#fff8f1":""}">${c==="red"?"🔴":"🟠"} ${esc(t)}</div>`).join("");
+}
+
+/* ---------------- fleet table (shared, dashboard + my equipment) ---------------- */
+function fleetTable(user=false){let arr=state.fleet.filter(f=>!f.archived);if(user)arr=arr.slice(0,3);return `<div class="tablewrap"><table><thead><tr><th>Plate No</th><th>Vehicle Type</th><th>Project</th><th>Location</th><th>Status</th>${!user?"<th></th>":""}</tr></thead><tbody>${arr.map(f=>`<tr><td>${esc(f.id)}</td><td>${esc(f.vehicleType||f.cat||"—")}</td><td>${esc(f.projectName||"—")}</td><td>${esc(f.location||"—")}</td><td>${projBadge(f.projectStatus)}</td>${!user?`<td><button class="btn secondary mini" onclick="viewProject('${f._id}')">View</button></td>`:""}</tr>`).join("")||emptyRow(user?5:6)}</tbody></table></div>`}
+function viewFleet(id){return viewProject(id)}
+
+/* ============================================================
+   ROW RENDERERS  (each reads its search box + rebuilds tbody)
+   ============================================================ */
+function render_fleet(){let el=document.getElementById("fleetRows");if(!el)return;let view=curView("fleet");let q=(document.getElementById("fleetSearch")?.value||"").toLowerCase();let arr=state.fleet.filter(r=>(view==="archived"?r.archived:!r.archived)).filter(r=>[r.id,r.clientName,r.vehicleBrand,r.vehicleType||r.cat,r.vehicleSize,r.projectName,r.location,r.projectStart,r.projectEnd,r.projectStatus,r.comments].join(" ").toLowerCase().includes(q));el.innerHTML=arr.map(r=>`<tr><td><input type="checkbox" class="rowchk" data-id="${r._id}"></td><td>${esc(r.id)}</td><td>${esc(r.clientName||"—")}</td><td>${esc(r.vehicleBrand||"—")}</td><td>${esc(r.vehicleType||r.cat||"—")}</td><td>${esc(r.vehicleSize||"—")}</td><td>${esc(r.projectName||"—")}</td><td>${esc(r.location||"—")}</td><td>${esc(r.projectStart||"—")}</td><td>${esc(r.projectEnd||"—")}</td><td>${projBadge(r.projectStatus)}</td><td>${esc(r.comments||"—")}</td><td><div class="rowbtns"><button class="btn secondary mini" onclick="viewProject('${r._id}')">View</button><button class="btn secondary mini" onclick="openProject('${r._id}')">Edit</button><button class="btn danger mini" onclick="del('fleet','${r._id}')">Delete</button></div></td></tr>`).join("")||emptyRow(13)}
+function projFor(plate){return state.fleet.find(f=>f.id===plate)||{}}
+function render_rentals(){let el=document.getElementById("rentalsRows");if(!el)return;let view=curView("rentals");let q=(document.getElementById("rentalsSearch")?.value||"").toLowerCase();let arr=state.rentals.filter(r=>(view==="archived"?r.archived:!r.archived)).filter(r=>[r.no,r.customer,r.fleet,r.site,r.status,r.vehicleBrand,r.vehicleType,r.vehicleSize].join(" ").toLowerCase().includes(q));el.innerHTML=arr.map(r=>{let total=amt(r.totalAmount!=null?r.totalAmount:r.rate);let partial=r.status==="Payment received"?total:(r.status==="Partial payment received"?amt(r.partialPayment):0);let remaining=total-partial;let pj=projFor(r.fleet);let vb=r.vehicleBrand||pj.vehicleBrand||"—";let vt=r.vehicleType||pj.vehicleType||pj.cat||"—";let vs=r.vehicleSize||pj.vehicleSize||"—";return `<tr><td><input type="checkbox" class="rowchk" data-id="${r._id}"></td><td>${esc(r.no)}</td><td>${esc(r.customer)}</td><td>${esc(r.fleet)}</td><td>${esc(vb)}</td><td>${esc(vt)}</td><td>${esc(vs)}</td><td>${esc(r.site)}</td><td>${esc(r.start)}</td><td>${esc(r.end)}</td><td>${esc(r.startReading||"—")}</td><td>${esc(r.endReading||"—")}</td><td>${money(total)}</td><td>${partial?money(partial):"—"}</td><td>${money(remaining)}</td><td>${payBadge(r.status)}</td><td><div class="rowbtns"><button class="btn secondary mini" onclick="openRental('${r._id}')">Edit</button><button class="btn danger mini" onclick="del('rentals','${r._id}')">Delete</button></div></td></tr>`}).join("")||emptyRow(17)}
+function render_timesheet(){let el=document.getElementById("timesheetRows");if(!el)return;let view=curView("timesheet");let q=(document.getElementById("timesheetSearch")?.value||"").toLowerCase();let arr=state.timesheet.filter(r=>(view==="archived"?r.archived:!r.archived)).filter(r=>[r.date,r.vehicleName,r.vehicleType,r.workingHours,r.breakdownHours,r.breakdownComments].join(" ").toLowerCase().includes(q));el.innerHTML=arr.map(r=>`<tr><td><input type="checkbox" class="rowchk" data-id="${r._id}"></td><td>${esc(r.date||"—")}</td><td>${esc(r.vehicleName||"—")}</td><td>${esc(r.vehicleType||"—")}</td><td>${esc(r.workingHours||"—")}</td><td>${esc(r.breakdownHours||"—")}</td><td>${esc(r.breakdownComments||"—")}</td><td><div class="rowbtns"><button class="btn secondary mini" onclick="openTimesheet('${r._id}')">Edit</button><button class="btn danger mini" onclick="del('timesheet','${r._id}')">Delete</button></div></td></tr>`).join("")||emptyRow(8)}
+function render_maintenance(){let el=document.getElementById("maintenanceRows");if(!el)return;let arr=filterRows("maintenance","maintenance");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.fleet)}</td><td>${esc(r.service)}</td><td>${esc(r.interval)}</td><td>${esc(r.current)}</td><td>${esc(r.next)}</td><td>${esc(r.tech)}</td><td>${badge(r.status)}</td><td>${actionBtns("maintenance",r._id,"openMaintenance")}</td></tr>`).join("")||emptyRow(8)}
+function render_breakdowns(){let el=document.getElementById("breakdownsRows");if(!el)return;let arr=filterRows("breakdowns","breakdowns");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.no)}</td><td>${esc(r.fleet)}</td><td>${esc(r.date)}</td><td>${esc(r.location)}</td><td>${esc(r.severity||"—")}</td><td>${esc(r.reason)}</td><td>${esc(r.hours)} hrs</td><td>${badge(r.status)}</td><td>${actionBtns("breakdowns",r._id,"openBreakdown")}</td></tr>`).join("")||emptyRow(9)}
+function render_workshop(){let el=document.getElementById("workshopRows");if(!el)return;let arr=filterRows("workshop","workshop");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.no)}</td><td>${esc(r.fleet)}</td><td>${esc(r.job)}</td><td>${esc(r.tech)}</td><td>${esc(r.parts||"—")}</td><td>${esc(r.cost||"—")}</td><td>${badge(r.status)}</td><td>${actionBtns("workshop",r._id,"openWorkshop")}</td></tr>`).join("")||emptyRow(8)}
+function render_locations(){let el=document.getElementById("locationsRows");if(!el)return;let arr=filterRows("locations","locations");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.datetime)}</td><td>${esc(r.fleet)}</td><td>${esc(r.location)}</td><td>${esc(r.event)}</td><td>${esc(r.hours)}</td><td>${actionBtns("locations",r._id,"openLocation")}</td></tr>`).join("")||emptyRow(6)}
+function render_inventory(){let el=document.getElementById("inventoryRows");if(!el)return;let arr=filterRows("garageInventory","inventory");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.no)}</td><td>${esc(r.item)}</td><td>${esc(r.cat)}</td><td>${esc(r.qty)}</td><td>${esc(r.min)}</td><td>${esc(r.unit)}</td><td>${esc(r.location)}</td><td>${esc(r.supplier)}</td><td>${badge(Number(r.qty)<Number(r.min)?"Low Stock":"In Stock")}</td><td>${actionBtns("garageInventory",r._id,"openInventory")}</td></tr>`).join("")||emptyRow(10)}
+function render_staff(){let el=document.getElementById("staffRows");if(!el)return;let arr=filterRows("staff","staff");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.name)}</td><td>${esc(r.passport)}</td><td>${esc(r.license)}</td><td>${esc(r.licenseExpiry)}</td><td>${esc(r.designation)}</td><td>${esc(r.phone)}</td><td>${fileLinks(r.docFiles)}</td><td>${badge(r.status)}</td><td>${actionBtns("staff",r._id,"openStaff")}</td></tr>`).join("")||emptyRow(10)}
+function render_vehicleRecords(){let el=document.getElementById("vehicleRecordsRows");if(!el)return;let arr=filterRows("vehicleRecords","vehicleRecords");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.fleet)}</td><td>${esc(r.registration)}</td><td>${esc(r.vin)}</td><td>${esc(r.insurancePolicy)}</td><td>${esc(r.insuranceExpiry)}</td><td>${esc(r.registrationExpiry)}</td><td>${esc(r.inspectionExpiry)}</td><td>${esc(r.purchaseDate)}</td><td>${fileLinks(r.docFiles)}</td><td><div class="rowbtns"><button class="btn secondary mini" onclick="viewVehicle('${r._id}')">View</button><button class="btn secondary mini" onclick="openVehicle('${r._id}')">Edit</button><button class="btn danger mini" onclick="deleteVehicle('${r._id}')">Delete</button></div></td></tr>`).join("")||emptyRow(10)}
+function viewVehicle(id){let v=find("vehicleRecords",id);if(!v)return;openModal("Vehicle Record — "+esc(v.fleet||v.registration||""),`
+ <img id="vehImg" alt="Vehicle image" style="display:none;width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">
+ <div id="vehNoImg" class="hint" style="margin-bottom:14px">No vehicle image uploaded yet — use “Edit Record” below to add one.</div>
+ <div class="detail">
+  <div><small>Fleet ID</small><b>${esc(v.fleet||"—")}</b></div>
+  <div><small>Registration</small><b>${esc(v.registration||"—")}</b></div>
+  <div><small>VIN / Serial</small><b>${esc(v.vin||"—")}</b></div>
+  <div><small>Insurance Policy</small><b>${esc(v.insurancePolicy||"—")}</b></div>
+  <div><small>Insurance Expiry</small><b>${esc(v.insuranceExpiry||"—")}</b></div>
+  <div><small>Registration Expiry</small><b>${esc(v.registrationExpiry||"—")}</b></div>
+  <div><small>Inspection Expiry</small><b>${esc(v.inspectionExpiry||"—")}</b></div>
+  <div><small>Purchase Date</small><b>${esc(v.purchaseDate||"—")}</b></div>
+  <div><small>Last Oil Change Reading</small><b>${esc(v.lastOilChange||"—")}</b></div>
+ </div>
+ <div style="margin-top:14px"><small style="color:var(--muted);font-size:11px">Documents</small><div style="margin-top:4px;font-size:13px">${fileLinks(v.docFiles)}</div></div>
+ <div style="margin-top:14px"><small style="color:var(--muted);font-size:11px">Comments / Notes</small><div style="margin-top:4px;font-size:13px;background:#f8fafc;border-radius:8px;padding:11px;white-space:pre-wrap;min-height:44px">${esc(v.comment||"—")}</div></div>
+ <div style="display:flex;gap:8px;margin-top:18px">
+  <button class="btn primary" onclick="openVehicle('${id}')">✎ Edit Record</button>
+  <button class="btn secondary" onclick="closeModal()">Close</button>
+ </div>`);
+ if(v.imageFile&&(v.imageFile.url||v.imageFile.id))loadImageInto("vehImg",v.imageFile,"vehNoImg");
+}
+async function loadImageInto(imgId,fileRef,noteId){if(!fileRef)return;let src=null;if(fileRef.url)src=fileRef.url;else if(fileRef.id){const blob=await idbGet(fileRef.id);if(blob)src=URL.createObjectURL(blob);}if(!src)return;const el=document.getElementById(imgId);if(el){el.src=src;el.style.display="block";}const note=noteId&&document.getElementById(noteId);if(note)note.style.display="none";}
+const OPDOCS=[["passport","Passport"],["qid","QID"],["license","License"],["tuv","TUV Certificate"],["health","Health Certificate"],["other1","Other Document 1"],["other2","Other Document 2"]];
+function opDocCount(r){return OPDOCS.filter(([k])=>r[k]&&(r[k].id||r[k].url)).length}
+function render_documents(){let el=document.getElementById("documentsRows");if(!el)return;let q=(document.getElementById("documentsSearch")?.value||"").toLowerCase();let arr=state.documents.filter(r=>String(r.operatorName||"").toLowerCase().includes(q));el.innerHTML=arr.map(r=>`<tr><td><input type="checkbox" class="rowchk" data-id="${r._id}"></td><td>${esc(r.operatorName||"—")}</td><td>${opDocCount(r)} / ${OPDOCS.length} uploaded</td><td><div class="rowbtns"><button class="btn secondary mini" onclick="viewOperatorDocs('${r._id}')">View</button><button class="btn secondary mini" onclick="openDocument('${r._id}')">Edit</button><button class="btn danger mini" onclick="del('documents','${r._id}')">Delete</button></div></td></tr>`).join("")||emptyRow(4)}
+function opDocLabel(k,def,r){if(k==="other1")return r.other1Label||def;if(k==="other2")return r.other2Label||def;return def}
+function opDocCurrent(ref){if(ref&&ref.url)return `<a class="filelink" href="${esc(ref.url)}" target="_blank" rel="noopener">Open</a> · <a class="filelink" href="${esc(ref.url)}" download>Download</a> <span class="muted">(${esc(ref.name)})</span>`;if(ref&&ref.id)return `<span class="filelink" onclick="openFile('${ref.id}')">Open</span> · <span class="filelink" onclick="downloadStored('${ref.id}','${encodeURIComponent(ref.name||"document")}')">Download</span> <span class="muted">(${esc(ref.name)})</span>`;return '<span class="muted">Not uploaded yet</span>'}
+async function downloadStored(id,name){const blob=await idbGet(id);if(!blob){toast("File not found in this browser");return}const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=decodeURIComponent(name||"document");document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function viewOperatorDocs(id){let r=find("documents",id);if(!r)return;let rows=OPDOCS.map(([k,def])=>{let label=opDocLabel(k,def,r);let labelInput=(k==="other1"||k==="other2")?`<input id="od_${k}label" value="${esc((k==="other1"?r.other1Label:r.other2Label)||"")}" placeholder="Label (e.g. Visa)" style="margin-bottom:6px">`:`<div style="font-weight:700;font-size:12px;margin-bottom:6px">${esc(label)}</div>`;return `<div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:11px;margin-bottom:8px">
+  ${labelInput}
+  <div style="font-size:12px;margin-bottom:7px">${opDocCurrent(r[k])}</div>
+  <input id="od_${k}" type="file" accept=".pdf,.jpg,.jpeg,.png">
+ </div>`}).join("");
+ openModal("Documents — "+esc(r.operatorName||""),`<form onsubmit="saveOperatorDocs(event,'${id}')">
+  <div class="hint" style="margin-bottom:12px">Upload a file for any document, then Save. Existing files can be opened or downloaded above.</div>
+  ${rows}
+  <div style="display:flex;gap:8px;margin-top:6px"><button class="btn primary" type="submit">Save Uploads</button><button class="btn secondary" type="button" onclick="closeModal()">Close</button></div>
+ </form>`)}
+async function saveOperatorDocs(e,id){e.preventDefault();let r=find("documents",id);if(!r)return;let btn=e.submitter;if(btn){btn.disabled=true;btn.textContent="Saving…"}try{for(const [k] of OPDOCS){let input=document.getElementById("od_"+k);let cap=await grabFiles(input);if(cap&&cap.length)r[k]=cap[0];}let l1=document.getElementById("od_other1label");let l2=document.getElementById("od_other2label");if(l1)r.other1Label=l1.value.trim();if(l2)r.other2Label=l2.value.trim();saveState();closeModal();render_documents();toast("Documents saved ✓");}catch(err){console.error(err);if(btn){btn.disabled=false;btn.textContent="Save Uploads"}toast("⚠ Save failed: "+(err.message||err))}}
+function render_users(){let el=document.getElementById("usersRows");if(!el)return;let arr=filterRows("users","users");el.innerHTML=arr.map(r=>`<tr><td>${esc(r.username)}</td><td>${esc(r.name)}</td><td>${esc(r.role)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${badge(r.status)}</td><td>${actionBtns("users",r._id,"openUser")}</td></tr>`).join("")||emptyRow(7)}
+
+/* ============================================================
+   ADD / EDIT FORMS  (open* opens modal; save* persists)
+   open*(id) with id => edit; without id => add
+   ============================================================ */
+function submitBtn(txt){return `<button class="btn primary" style="margin-top:16px">${txt}</button>`}
+
+/* FLEET */
+function openProject(id){let p=id?find("fleet",id):{};openModal(id?"Edit Project":"Add Project",`<form onsubmit="saveProject(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Plate No</label><input id="p_plate" value="${esc(p.id||"")}" required></div>
+ <div class="field"><label>Client Name</label><input id="p_client" value="${esc(p.clientName||"")}"></div>
+ <div class="field"><label>Vehicle Brand</label><input id="p_brand" value="${esc(p.vehicleBrand||"")}" placeholder="e.g. CAT, Komatsu"></div>
+ <div class="field"><label>Vehicle Type</label><input id="p_vtype" value="${esc(p.vehicleType||p.cat||"")}"></div>
+ <div class="field"><label>Vehicle Size</label><input id="p_size" value="${esc(p.vehicleSize||"")}" placeholder="e.g. 20T, 500KVA"></div>
+ <div class="field"><label>Project Name</label><input id="p_name" value="${esc(p.projectName||"")}"></div>
+ <div class="field"><label>Location</label><input id="p_loc" value="${esc(p.location||"")}"></div>
+ <div class="field"><label>Project Start Date</label><input id="p_start" type="date" value="${esc(p.projectStart||"")}"></div>
+ <div class="field"><label>Project End Date</label><input id="p_end" type="date" value="${esc(p.projectEnd||"")}"></div>
+ <div class="field"><label>Project Status</label><select id="p_status">${opts(["Started","On Going","Closed"],p.projectStatus||"Started")}</select></div>
+ <div class="field"><label>Reading @ Project Start</label><input id="p_sr" value="${esc(p.startReading||"")}" placeholder="e.g. 4820"></div>
+ <div class="field"><label>Reading @ Project End</label><input id="p_er" value="${esc(p.endReading||"")}" placeholder="e.g. 5210"></div>
+ <div class="field"><label>Date</label><input id="p_date" type="date" value="${esc(p.workDate||"")}"></div>
+ <div class="field"><label>Hours of Working</label><input id="p_work" value="${esc(p.workingHours||"")}" placeholder="e.g. 8"></div>
+ <div class="field"><label>Breakdown Time (hrs)</label><input id="p_bd" value="${esc(p.breakdownTime||"")}" placeholder="e.g. 2"></div>
+ <div class="field" style="grid-column:1/-1"><label>Comments</label><textarea id="p_comments" rows="3" placeholder="Notes about this project...">${esc(p.comments||"")}</textarea></div>
+ <div class="field" style="grid-column:1/-1"><label>Breakdown Comments</label><textarea id="p_bdcomments" rows="3" placeholder="Details of any breakdown...">${esc(p.breakdownComments||"")}</textarea></div>
+ </div>${submitBtn(id?"Update Project":"Save Project")}</form>`)}
+function saveProject(e,id){e.preventDefault();let base=id?Object.assign({},find("fleet",id)):{};let rec=Object.assign(base,{id:document.getElementById("p_plate").value.trim(),clientName:p_client.value.trim(),vehicleBrand:p_brand.value.trim(),vehicleType:p_vtype.value.trim(),vehicleSize:p_size.value.trim(),projectName:p_name.value.trim(),location:p_loc.value.trim(),projectStart:p_start.value,projectEnd:p_end.value,projectStatus:p_status.value,startReading:p_sr.value.trim(),endReading:p_er.value.trim(),workDate:p_date.value,workingHours:p_work.value.trim(),breakdownTime:p_bd.value.trim(),comments:document.getElementById("p_comments").value,breakdownComments:document.getElementById("p_bdcomments").value,archived:id?(find("fleet",id).archived||false):false});upsert("fleet",id,rec);done("fleet","Project "+(id?"updated":"added"))}
+function viewProject(id){let p=find("fleet",id);if(!p)return;openModal("Project Details — "+esc(p.projectName||p.id||""),`<div class="detail">
+ <div><small>Plate No</small><b>${esc(p.id||"—")}</b></div>
+ <div><small>Client Name</small><b>${esc(p.clientName||"—")}</b></div>
+ <div><small>Vehicle Brand</small><b>${esc(p.vehicleBrand||"—")}</b></div>
+ <div><small>Vehicle Type</small><b>${esc(p.vehicleType||p.cat||"—")}</b></div>
+ <div><small>Vehicle Size</small><b>${esc(p.vehicleSize||"—")}</b></div>
+ <div><small>Project Name</small><b>${esc(p.projectName||"—")}</b></div>
+ <div><small>Location</small><b>${esc(p.location||"—")}</b></div>
+ <div><small>Start Date</small><b>${esc(p.projectStart||"—")}</b></div>
+ <div><small>End Date</small><b>${esc(p.projectEnd||"—")}</b></div>
+ <div><small>Status</small><b>${esc(p.projectStatus||"—")}</b></div>
+ <div><small>Vehicle Reading @ Start</small><b>${esc(p.startReading||"—")}</b></div>
+ <div><small>Vehicle Reading @ End</small><b>${esc(p.endReading||"—")}</b></div>
+ <div><small>Date</small><b>${esc(p.workDate||"—")}</b></div>
+ <div><small>Hours of Working</small><b>${esc(p.workingHours||"—")}</b></div>
+ <div><small>Breakdown Time</small><b>${esc(p.breakdownTime||"—")}</b></div>
+</div>
+<div style="margin-top:14px"><small style="color:var(--muted);font-size:11px">Comments</small><div style="margin-top:4px;font-size:13px;background:#f8fafc;border-radius:8px;padding:11px;white-space:pre-wrap;min-height:44px">${esc(p.comments||"—")}</div></div>
+<div style="margin-top:14px"><small style="color:var(--muted);font-size:11px">Breakdown Comments</small><div style="margin-top:4px;font-size:13px;background:#f8fafc;border-radius:8px;padding:11px;white-space:pre-wrap;min-height:44px">${esc(p.breakdownComments||"—")}</div></div>
+<div style="display:flex;gap:8px;margin-top:18px"><button class="btn primary" onclick="openProject('${id}')">✎ Edit Project</button><button class="btn secondary" onclick="closeModal()">Close</button></div>`)}
+
+/* RENTALS */
+function openRental(id){let r=id?find("rentals",id):{};openModal(id?"Edit Rental Contract":"New Rental Contract",`<form onsubmit="saveRental(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Contract No.</label><input id="r_no" value="${esc(r.no||"")}" required></div>
+ <div class="field"><label>Client Name</label><input id="r_customer" value="${esc(r.customer||"")}" required></div>
+ <div class="field"><label>Plate No</label><select id="r_fleet" onchange="rentalFillVehicle()">${fleetOpts(r.fleet)}</select></div>
+ <div class="field"><label>Vehicle Brand</label><input id="r_brand" value="${esc(r.vehicleBrand||"")}"></div>
+ <div class="field"><label>Vehicle Type</label><input id="r_vtype" value="${esc(r.vehicleType||"")}"></div>
+ <div class="field"><label>Vehicle Size</label><input id="r_size" value="${esc(r.vehicleSize||"")}"></div>
+ <div class="field"><label>Project / Site</label><input id="r_site" value="${esc(r.site||"")}" required></div>
+ <div class="field"><label>Start Date</label><input id="r_start" type="date" value="${esc(r.start||"")}" required></div>
+ <div class="field"><label>Return Date</label><input id="r_end" type="date" value="${esc(r.end||"")}" required></div>
+ <div class="field"><label>Vehicle Start Reading</label><input id="r_sr" type="number" min="0" step="0.1" value="${esc(r.startReading||"")}"></div>
+ <div class="field"><label>Vehicle End Reading</label><input id="r_er" type="number" min="0" step="0.1" value="${esc(r.endReading||"")}"></div>
+ <div class="field"><label>Total Rent Amount (QAR)</label><input id="r_total" type="number" min="0" step="0.01" value="${esc(r.totalAmount!=null?r.totalAmount:(r.rate?amt(r.rate):""))}" required></div>
+ <div class="field"><label>Status</label><select id="r_status" onchange="togglePartial()">${opts(["Active","Partial payment received","Payment received"],r.status||"Active")}</select></div>
+ <div class="field" id="r_partialWrap"><label>Partial Payment Received (QAR)</label><input id="r_partial" type="number" min="0" step="0.01" value="${esc(r.partialPayment||"")}"></div>
+ </div><div class="hint">Vehicle brand/type/size auto-fill from the selected plate's project — you can override them.</div>${submitBtn(id?"Update Contract":"Create Contract")}</form>`);togglePartial();if(!id)rentalFillVehicle()}
+function rentalFillVehicle(){let sel=document.getElementById("r_fleet");if(!sel)return;let pj=projFor(sel.value);let b=document.getElementById("r_brand"),t=document.getElementById("r_vtype"),s=document.getElementById("r_size");if(b&&!b.value)b.value=pj.vehicleBrand||"";if(t&&!t.value)t.value=pj.vehicleType||pj.cat||"";if(s&&!s.value)s.value=pj.vehicleSize||""}
+function togglePartial(){let s=document.getElementById("r_status"),w=document.getElementById("r_partialWrap");if(!s||!w)return;w.style.display=(s.value==="Partial payment received")?"":"none"}
+function saveRental(e,id){e.preventDefault();let total=amt(document.getElementById("r_total").value);let status=r_status.value;let partial=status==="Partial payment received"?amt(document.getElementById("r_partial").value):(status==="Payment received"?total:0);let rec={no:r_no.value.trim(),customer:r_customer.value.trim(),fleet:r_fleet.value,vehicleBrand:r_brand.value.trim(),vehicleType:r_vtype.value.trim(),vehicleSize:r_size.value.trim(),site:r_site.value.trim(),start:r_start.value,end:r_end.value,startReading:r_sr.value,endReading:r_er.value,totalAmount:total,partialPayment:partial,status:status,archived:id?(find("rentals",id).archived||false):false};upsert("rentals",id,rec);done("rentals","Rental "+(id?"updated":"created"))}
+
+/* TIMESHEET */
+function openTimesheet(id){let t=id?find("timesheet",id):{};openModal(id?"Edit Timesheet Entry":"Add Timesheet Entry",`<form onsubmit="saveTimesheet(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Date</label><input id="t_date" type="date" value="${esc(t.date||new Date().toISOString().slice(0,10))}"></div>
+ <div class="field"><label>Vehicle Name</label><input id="t_vname" value="${esc(t.vehicleName||"")}" placeholder="Plate no or name" required></div>
+ <div class="field"><label>Vehicle Type</label><input id="t_vtype" value="${esc(t.vehicleType||"")}"></div>
+ <div class="field"><label>Hours of Working</label><input id="t_work" type="number" min="0" step="0.5" value="${esc(t.workingHours||"")}"></div>
+ <div class="field"><label>Hours of Breakdown</label><input id="t_bd" type="number" min="0" step="0.5" value="${esc(t.breakdownHours||"")}"></div>
+ <div class="field" style="grid-column:1/-1"><label>Breakdown Comments</label><textarea id="t_bdcomments" rows="3" placeholder="Details of any breakdown...">${esc(t.breakdownComments||"")}</textarea></div>
+ </div>${submitBtn(id?"Update Entry":"Save Entry")}</form>`)}
+function saveTimesheet(e,id){e.preventDefault();let rec={date:t_date.value,vehicleName:t_vname.value.trim(),vehicleType:t_vtype.value.trim(),workingHours:t_work.value.trim(),breakdownHours:t_bd.value.trim(),breakdownComments:document.getElementById("t_bdcomments").value,archived:id?(find("timesheet",id).archived||false):false};upsert("timesheet",id,rec);done("timesheet","Timesheet entry "+(id?"updated":"added"))}
+
+/* MAINTENANCE */
+function openMaintenance(id){let m=id?find("maintenance",id):{};openModal(id?"Edit Maintenance":"Schedule Maintenance",`<form onsubmit="saveMaintenance(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Fleet</label><select id="m_fleet">${fleetOpts(m.fleet)}</select></div>
+ <div class="field"><label>Service Type</label><input id="m_service" value="${esc(m.service||"")}" placeholder="500 hr service" required></div>
+ <div class="field"><label>Interval</label><input id="m_interval" value="${esc(m.interval||"")}" placeholder="500 hrs"></div>
+ <div class="field"><label>Current Hrs</label><input id="m_current" type="number" min="0" value="${esc(m.current||"")}"></div>
+ <div class="field"><label>Next Due (hrs)</label><input id="m_next" value="${esc(m.next||"")}" required></div>
+ <div class="field"><label>Technician</label><input id="m_tech" value="${esc(m.tech||"")}"></div>
+ <div class="field"><label>Status</label><select id="m_status">${opts(["Scheduled","Due Soon","Overdue","Completed"],m.status||"Scheduled")}</select></div>
+ </div>${submitBtn(id?"Update":"Schedule")}</form>`)}
+function saveMaintenance(e,id){e.preventDefault();let rec={fleet:m_fleet.value,service:m_service.value.trim(),interval:m_interval.value.trim(),current:m_current.value,next:m_next.value.trim(),tech:m_tech.value.trim(),status:m_status.value};upsert("maintenance",id,rec);done("maintenance","Maintenance "+(id?"updated":"scheduled"))}
+
+/* BREAKDOWNS */
+function openBreakdown(id){let b=id?find("breakdowns",id):{};openModal(id?"Edit Breakdown":"Report Breakdown",`<form onsubmit="saveBreakdown(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Breakdown No.</label><input id="b_no" value="${esc(b.no||("BD-"+new Date().getFullYear()+"-"+Date.now().toString().slice(-5)))}" required></div>
+ <div class="field"><label>Fleet</label><select id="b_fleet">${fleetOpts(b.fleet)}</select></div>
+ <div class="field"><label>Date</label><input id="b_date" type="date" value="${esc(b.date||new Date().toISOString().slice(0,10))}" required></div>
+ <div class="field"><label>Location</label><input id="b_location" value="${esc(b.location||"")}" required></div>
+ <div class="field"><label>Severity</label><select id="b_sev">${opts(["Low","Medium","High","Critical"],b.severity||"Medium")}</select></div>
+ <div class="field"><label>Reason</label><input id="b_reason" value="${esc(b.reason||"")}" required></div>
+ <div class="field"><label>Downtime (hrs)</label><input id="b_hours" value="${esc(b.hours||"0")}"></div>
+ <div class="field"><label>Status</label><select id="b_status">${opts(["Open","In Progress","Closed"],b.status||"Open")}</select></div>
+ </div>${submitBtn(id?"Update":"Submit Breakdown")}</form>`)}
+function saveBreakdown(e,id){e.preventDefault();let rec={no:b_no.value.trim(),fleet:b_fleet.value,date:b_date.value,location:b_location.value.trim(),severity:b_sev.value,reason:b_reason.value.trim(),hours:b_hours.value.trim(),status:b_status.value};upsert("breakdowns",id,rec);let f=state.fleet.find(x=>x.id===rec.fleet);if(f&&rec.status!=="Closed")f.status="Breakdown";done("breakdowns","Breakdown "+(id?"updated":"reported"))}
+
+/* WORKSHOP */
+function openWorkshop(id){let w=id?find("workshop",id):{};openModal(id?"Edit Work Order":"New Work Order",`<form onsubmit="saveWorkshop(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>WO No.</label><input id="w_no" value="${esc(w.no||("WO-"+new Date().getFullYear()+"-"+Date.now().toString().slice(-5)))}" required></div>
+ <div class="field"><label>Fleet</label><select id="w_fleet">${fleetOpts(w.fleet)}</select></div>
+ <div class="field"><label>Job</label><input id="w_job" value="${esc(w.job||"")}" required></div>
+ <div class="field"><label>Technician</label><input id="w_tech" value="${esc(w.tech||"")}"></div>
+ <div class="field"><label>Parts</label><input id="w_parts" value="${esc(w.parts||"")}"></div>
+ <div class="field"><label>Cost</label><input id="w_cost" value="${esc(w.cost||"")}" placeholder="QAR 1,100"></div>
+ <div class="field"><label>Status</label><select id="w_status">${opts(["Open","In Progress","Completed"],w.status||"Open")}</select></div>
+ </div>${submitBtn(id?"Update":"Save Work Order")}</form>`)}
+function saveWorkshop(e,id){e.preventDefault();let rec={no:w_no.value.trim(),fleet:w_fleet.value,job:w_job.value.trim(),tech:w_tech.value.trim(),parts:w_parts.value.trim(),cost:w_cost.value.trim(),status:w_status.value};upsert("workshop",id,rec);done("workshop","Work order "+(id?"updated":"created"))}
+
+/* LOCATIONS */
+function openLocation(id){let l=id?find("locations",id):{};openModal(id?"Edit Location Log":"Add Location Log",`<form onsubmit="saveLocation(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Date / Time</label><input id="l_dt" value="${esc(l.datetime||new Date().toISOString().slice(0,16).replace('T',' '))}" required></div>
+ <div class="field"><label>Fleet</label><select id="l_fleet">${fleetOpts(l.fleet)}</select></div>
+ <div class="field"><label>Location</label><input id="l_loc" value="${esc(l.location||"")}" required></div>
+ <div class="field"><label>Event</label><select id="l_event">${opts(["Departed","Arrived","Operating","Idle","Returned"],l.event||"Arrived")}</select></div>
+ <div class="field"><label>Engine Hrs</label><input id="l_hours" value="${esc(l.hours||"")}"></div>
+ </div>${submitBtn(id?"Update":"Save Log")}</form>`)}
+function saveLocation(e,id){e.preventDefault();let rec={datetime:l_dt.value.trim(),fleet:l_fleet.value,location:l_loc.value.trim(),event:l_event.value,hours:l_hours.value.trim()};upsert("locations",id,rec);done("locations","Location log "+(id?"updated":"added"))}
+
+/* INVENTORY */
+function openInventory(id){let i=id?find("garageInventory",id):{};openModal(id?"Edit Stock Item":"Add Garage Stock Item",`<form onsubmit="saveInventory(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Part / Item No.</label><input id="i_no" value="${esc(i.no||"")}" required></div>
+ <div class="field"><label>Item Name</label><input id="i_item" value="${esc(i.item||"")}" required></div>
+ <div class="field"><label>Category</label><input id="i_cat" value="${esc(i.cat||"")}" required></div>
+ <div class="field"><label>Quantity</label><input id="i_qty" type="number" min="0" value="${esc(i.qty!=null?i.qty:0)}" required></div>
+ <div class="field"><label>Minimum Stock</label><input id="i_min" type="number" min="0" value="${esc(i.min!=null?i.min:0)}" required></div>
+ <div class="field"><label>Unit</label><input id="i_unit" value="${esc(i.unit||"Nos")}" required></div>
+ <div class="field"><label>Garage Location</label><input id="i_loc" value="${esc(i.location||"Main Garage")}" required></div>
+ <div class="field"><label>Supplier</label><input id="i_supplier" value="${esc(i.supplier||"")}"></div>
+ </div>${submitBtn(id?"Update":"Save Stock Item")}</form>`)}
+function saveInventory(e,id){e.preventDefault();let rec={no:i_no.value.trim(),item:i_item.value.trim(),cat:i_cat.value.trim(),qty:+i_qty.value,min:+i_min.value,unit:i_unit.value.trim(),location:i_loc.value.trim(),supplier:i_supplier.value.trim()||"—"};upsert("garageInventory",id,rec);done("inventory","Stock item "+(id?"updated":"added"))}
+
+/* STAFF (with file uploads) */
+function openStaff(id){let s=id?find("staff",id):{};openModal(id?"Edit Staff Record":"Add Staff Record",`<form onsubmit="saveStaff(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Staff ID</label><input id="s_id" value="${esc(s.id||"")}" required></div>
+ <div class="field"><label>Full Name</label><input id="s_name" value="${esc(s.name||"")}" required></div>
+ <div class="field"><label>Passport Number</label><input id="s_passport" value="${esc(s.passport||"")}" required></div>
+ <div class="field"><label>Passport Expiry</label><input id="s_pexp" type="date" value="${esc(s.passportExpiry||"")}"></div>
+ <div class="field"><label>License Number</label><input id="s_license" value="${esc(s.license||"")}" required></div>
+ <div class="field"><label>License Expiry</label><input id="s_lexp" type="date" value="${esc(s.licenseExpiry||"")}"></div>
+ <div class="field"><label>Designation</label><input id="s_desig" value="${esc(s.designation||"")}" placeholder="Operator / Mechanic" required></div>
+ <div class="field"><label>Phone</label><input id="s_phone" value="${esc(s.phone||"")}"></div>
+ <div class="field"><label>Status</label><select id="s_status">${opts(["Active","Inactive","On Leave"],s.status||"Active")}</select></div>
+ <div class="field"><label>Passport Upload</label><input id="s_pfile" type="file" accept=".pdf,.jpg,.jpeg,.png"></div>
+ <div class="field"><label>License Upload</label><input id="s_lfile" type="file" accept=".pdf,.jpg,.jpeg,.png"></div>
+ </div><div class="hint">${id&&s.docFiles&&s.docFiles.length?"Existing files: "+fileLinks(s.docFiles)+" — new uploads are added.":"Uploaded files are stored in your browser and can be opened later."}</div>${submitBtn(id?"Update Staff Record":"Save Staff Record")}</form>`)}
+async function saveStaff(e,id){e.preventDefault();let nf=[...await captureFiles(document.getElementById("s_pfile")),...await captureFiles(document.getElementById("s_lfile"))];let existing=id?(find("staff",id).docFiles||[]):[];let rec={id:s_id.value.trim(),name:s_name.value.trim(),passport:s_passport.value.trim(),passportExpiry:s_pexp.value,license:s_license.value.trim(),licenseExpiry:s_lexp.value,designation:s_desig.value.trim(),phone:s_phone.value.trim(),status:s_status.value,docFiles:[...existing,...nf]};upsert("staff",id,rec);done("staff","Staff record "+(id?"updated":"added"))}
+
+/* VEHICLE RECORDS (with file uploads) */
+function openVehicle(id){let v=id?find("vehicleRecords",id):{};openModal(id?"Edit Vehicle Record":"Add Vehicle Record",`<form onsubmit="saveVehicle(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Fleet ID</label><select id="v_fleet">${fleetOpts(v.fleet)}</select></div>
+ <div class="field"><label>Registration No.</label><input id="v_reg" value="${esc(v.registration||"")}" required></div>
+ <div class="field"><label>VIN / Serial No.</label><input id="v_vin" value="${esc(v.vin||"")}"></div>
+ <div class="field"><label>Insurance Policy No.</label><input id="v_ins" value="${esc(v.insurancePolicy||"")}"></div>
+ <div class="field"><label>Insurance Expiry</label><input id="v_insexp" type="date" value="${esc(v.insuranceExpiry||"")}"></div>
+ <div class="field"><label>Registration Expiry</label><input id="v_regexp" type="date" value="${esc(v.registrationExpiry||"")}"></div>
+ <div class="field"><label>Inspection Expiry</label><input id="v_inspexp" type="date" value="${esc(v.inspectionExpiry||"")}"></div>
+ <div class="field"><label>Purchase Date</label><input id="v_pur" type="date" value="${esc(v.purchaseDate||"")}"></div>
+ <div class="field"><label>Insurance Upload</label><input id="v_insfile" type="file" accept=".pdf,.jpg,.jpeg,.png"></div>
+ <div class="field"><label>Registration Upload</label><input id="v_regfile" type="file" accept=".pdf,.jpg,.jpeg,.png"></div>
+ <div class="field"><label>Inspection Upload</label><input id="v_inspfile" type="file" accept=".pdf,.jpg,.jpeg,.png"></div>
+ <div class="field"><label>Other Documents</label><input id="v_otherfile" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple></div>
+ <div class="field"><label>Vehicle Image</label><input id="v_imgfile" type="file" accept=".jpg,.jpeg,.png,.webp"></div>
+ <div class="field"><label>Last Oil Change Reading</label><input id="v_oil" value="${esc(v.lastOilChange||"")}" placeholder="e.g. 4720 hrs / km"></div>
+ <div class="field" style="grid-column:1/-1"><label>Comments / Notes</label><textarea id="v_comment" rows="4" placeholder="Add any notes about this vehicle (condition, reminders, history)...">${esc(v.comment||"")}</textarea></div>
+ </div><div class="hint">${id&&v.imageFile&&v.imageFile.id?"Existing image: "+esc(v.imageFile.name)+" — upload a new one to replace it. ":""}${id&&v.docFiles&&v.docFiles.length?"Existing documents: "+fileLinks(v.docFiles):"Uploaded files are stored in your browser and can be opened later."}</div>${submitBtn(id?"Update Vehicle Record":"Save Vehicle Record")}</form>`)}
+async function saveVehicle(e,id){
+ e.preventDefault();
+ const btn=e.submitter||e.target.querySelector('button[type="submit"],button:not([type])');
+ const oldTxt=btn?btn.textContent:"";
+ if(btn){btn.disabled=true;btn.textContent=CLOUD?"Saving to cloud…":"Saving…";}
+ try{
+  let nf=[...await grabFiles(v_insfile),...await grabFiles(v_regfile),...await grabFiles(v_inspfile),...await grabFiles(v_otherfile)];
+  let img=await grabImage(v_imgfile);
+  let existing=id?find("vehicleRecords",id):{};
+  let rec={fleet:v_fleet.value,registration:v_reg.value.trim(),vin:v_vin.value.trim(),insurancePolicy:v_ins.value.trim(),insuranceExpiry:v_insexp.value,registrationExpiry:v_regexp.value,inspectionExpiry:v_inspexp.value,purchaseDate:v_pur.value,lastOilChange:v_oil.value.trim(),comment:document.getElementById("v_comment").value,imageFile:img||existing.imageFile||null,docFiles:[...(existing.docFiles||[]),...nf]};
+  if(CLOUD){
+   if(id) await vehicleUpdate(id,rec); else await vehicleCreate(rec);
+   closeModal(); await refreshVehicles(); showPage("vehicleRecords");
+   toast("Vehicle record "+(id?"updated":"added")+" (shared) ✓");
+  }else{
+   upsert("vehicleRecords",id,rec);
+   done("vehicleRecords","Vehicle record "+(id?"updated":"added"));
+  }
+ }catch(err){
+  console.error(err);
+  if(btn){btn.disabled=false;btn.textContent=oldTxt;}
+  toast("⚠ Save failed: "+(err.message||err));
+ }
+}
+
+/* DOCUMENTS (with file upload) */
+function openDocument(id){let d=id?find("documents",id):{};openModal(id?"Edit Operator":"Add Operator",`<form onsubmit="saveDocument(event,'${id||""}')"><div class="formgrid">
+ <div class="field" style="grid-column:1/-1"><label>Operator Name</label><input id="d_name" value="${esc(d.operatorName||"")}" required></div>
+ </div><div class="hint">${id?"Use the View button on the operator row to upload/download Passport, QID, License, TUV, Health and other documents.":"After adding the operator, click View to upload their documents."}</div>${submitBtn(id?"Update Operator":"Save Operator")}</form>`)}
+function saveDocument(e,id){e.preventDefault();let base=id?Object.assign({},find("documents",id)):{passport:null,qid:null,license:null,tuv:null,health:null,other1:null,other2:null,other1Label:"",other2Label:""};let rec=Object.assign(base,{operatorName:document.getElementById("d_name").value.trim()});upsert("documents",id,rec);done("documents","Operator "+(id?"updated":"added"))}
+function deleteSelected(coll,bodyId){const ids=Array.from(document.querySelectorAll("#"+bodyId+" .rowchk:checked")).map(c=>c.dataset.id);if(!ids.length){toast("Tick at least one row first");return}if(!confirm("Delete "+ids.length+" selected record(s)?"))return;state[coll]=state[coll].filter(r=>!ids.includes(r._id));saveState();renderAll();toast(ids.length+" deleted")}
+
+/* USERS */
+function openUser(id){let u=id?find("users",id):{};openModal(id?"Edit User":"Add User",`<form onsubmit="saveUser(event,'${id||""}')"><div class="formgrid">
+ <div class="field"><label>Username</label><input id="u_username" value="${esc(u.username||"")}" required></div>
+ <div class="field"><label>Full Name</label><input id="u_name" value="${esc(u.name||"")}" required></div>
+ <div class="field"><label>Role</label><select id="u_role">${opts(["Administrator","Workshop Manager","Staff / Operator"],u.role||"Staff / Operator")}</select></div>
+ <div class="field"><label>Email</label><input id="u_email" type="email" value="${esc(u.email||"")}"></div>
+ <div class="field"><label>Phone</label><input id="u_phone" value="${esc(u.phone||"")}"></div>
+ <div class="field"><label>Status</label><select id="u_status">${opts(["Active","Inactive"],u.status||"Active")}</select></div>
+ </div>${submitBtn(id?"Update User":"Save User")}</form>`)}
+function saveUser(e,id){e.preventDefault();let rec={username:u_username.value.trim(),name:u_name.value.trim(),role:u_role.value,email:u_email.value.trim(),phone:u_phone.value.trim(),status:u_status.value};upsert("users",id,rec);done("users","User "+(id?"updated":"added"))}
+
+/* ---------------- upsert / done ---------------- */
+function upsert(coll,id,rec){
+ if(id){let existing=find(coll,id);Object.assign(existing,rec);}
+ else{rec._id=uid();state[coll].push(rec);}
+ saveState();
+}
+function done(page,msg){closeModal();renderAll();showPage(page);toast(msg+" ✓")}
+
+/* ============================================================
+   USER PORTAL forms
+   ============================================================ */
+function userDash(){
+ const assigned=state.rentals.filter(r=>r.status==="Active").length;
+ const open=state.breakdowns.filter(b=>b.status!=="Closed").length;
+ const due=state.maintenance.filter(m=>/due|overdue/i.test(m.status)).length;
+ return `<div class="cards">
+  <div class="card"><div class="label">ACTIVE RENTALS</div><div class="num blue">${assigned}</div></div>
+  <div class="card"><div class="label">OPEN BREAKDOWNS</div><div class="num red">${open}</div></div>
+  <div class="card"><div class="label">SERVICE DUE</div><div class="num orange">${due}</div></div></div>
+  <div class="grid"><div class="panel"><h2>Quick Actions</h2>
+   <button class="btn primary" onclick="showPage('report')">Report Breakdown</button>
+   <button class="btn secondary" onclick="showPage('myfleet')">View My Equipment</button></div>
+  <div class="panel"><h2>Notice</h2>${buildAlerts()}</div></div>`;
+}
+function reportBreakdownForm(){
+ return `<div class="panel"><h2>Report a Breakdown</h2><form onsubmit="submitUserBreakdown(event)"><div class="formgrid">
+  <div class="field"><label>Equipment</label><select id="ub_fleet">${fleetOpts()}</select></div>
+  <div class="field"><label>Location</label><input id="ub_location" required placeholder="Project / site"></div>
+  <div class="field"><label>Severity</label><select id="ub_sev">${opts(["Low","Medium","High","Critical"],"Medium")}</select></div>
+  <div class="field"><label>Reason</label><select id="ub_reason">${opts(["Engine","Hydraulic","Electrical","Transmission","Cooling","Tyres / Undercarriage","Operator Related","Other"],"Engine")}</select></div>
+  <div class="field"><label>Engine Hours</label><input id="ub_hours" type="number" min="0" required></div>
+  <div class="field"><label>Description</label><input id="ub_desc" required placeholder="Describe the problem"></div>
+  </div><button class="btn primary" style="margin-top:16px">Submit Breakdown</button></form></div>`;
+}
+function submitUserBreakdown(e){e.preventDefault();
+ let rec={_id:uid(),no:"BD-"+new Date().getFullYear()+"-"+Date.now().toString().slice(-5),fleet:ub_fleet.value,date:new Date().toISOString().slice(0,10),location:ub_location.value.trim(),severity:ub_sev.value,reason:ub_reason.value+" — "+ub_desc.value.trim(),hours:ub_hours.value,status:"Open"};
+ state.breakdowns.unshift(rec);let f=state.fleet.find(x=>x.id===rec.fleet);if(f)f.status="Breakdown";saveState();renderAll();showPage("userdash");toast("Breakdown submitted to maintenance team ✓")}
+
+/* ============================================================
+   REPORTS + BACKUP / EXPORT
+   ============================================================ */
+function renderReports(){
+ const list=state.fleet.filter(f=>!f.archived);
+ const total=list.length,
+   going=list.filter(x=>x.projectStatus==="On Going").length,
+   closed=list.filter(x=>x.projectStatus==="Closed").length,
+   openBd=state.breakdowns.filter(b=>b.status!=="Closed").length,
+   low=state.garageInventory.filter(i=>Number(i.qty)<Number(i.min)).length,
+   activeRent=state.rentals.filter(r=>!r.archived).length,
+   outstanding=state.rentals.filter(r=>!r.archived).reduce((s,r)=>{let t=amt(r.totalAmount!=null?r.totalAmount:r.rate);let p=r.status==="Payment received"?t:(r.status==="Partial payment received"?amt(r.partialPayment):0);return s+(t-p)},0);
+ document.getElementById("reports").innerHTML=`
+ <div class="cards">
+  <div class="card"><div class="label">TOTAL PROJECTS</div><div class="num">${total}</div></div>
+  <div class="card"><div class="label">ON GOING</div><div class="num blue">${going}</div></div>
+  <div class="card"><div class="label">CLOSED</div><div class="num green">${closed}</div></div>
+  <div class="card"><div class="label">ACTIVE RENTALS</div><div class="num orange">${activeRent}</div></div>
+  <div class="card"><div class="label">OUTSTANDING</div><div class="num red">${money(outstanding)}</div></div></div>
+ <div class="panel" style="margin-top:16px"><h2>Management Reports</h2>
+  <p class="muted">Live figures calculated from your records. Open breakdowns: ${openBd}. Low-stock parts: ${low}. Export any table to CSV, or back up the entire database as JSON.</p>
+  <div class="toolbar" style="margin-top:10px">
+   <button class="btn secondary" onclick="exportCSV('fleet')">Projects CSV</button>
+   <button class="btn secondary" onclick="exportCSV('rentals')">Rentals CSV</button>
+   <button class="btn secondary" onclick="exportCSV('maintenance')">Maintenance CSV</button>
+   <button class="btn secondary" onclick="exportCSV('breakdowns')">Breakdowns CSV</button>
+   <button class="btn secondary" onclick="exportCSV('inventory')">Inventory CSV</button>
+   <button class="btn secondary" onclick="exportCSV('staff')">Staff CSV</button>
+  </div>
+ </div>
+ <div class="panel"><h2>Backup & Restore</h2>
+  <p class="muted">Data is saved in this browser automatically. Use backup to move data to another device or keep a copy.</p>
+  <div class="toolbar" style="margin-top:10px">
+   <button class="btn primary" onclick="exportJSON()">⬇ Export Backup (JSON)</button>
+   <button class="btn secondary" onclick="document.getElementById('importFile').click()">⬆ Import Backup</button>
+   <input id="importFile" type="file" accept=".json" class="hidden" onchange="importJSON(event)">
+   <button class="btn secondary" onclick="resetDemo()">Reset to Demo Data</button>
+   <button class="btn danger" onclick="clearAll()">Clear All Data</button>
+  </div>
+ </div>`;
+}
+
+function toCSV(rows){
+ if(!rows.length)return "";
+ const keys=Object.keys(rows[0]).filter(k=>k!=="_id"&&k!=="docFiles");
+ const head=keys.join(",");
+ const body=rows.map(r=>keys.map(k=>{let raw=r[k];let v;if(raw&&typeof raw==="object")v=raw.name||"";else v=raw==null?"":String(raw);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\n");
+ return head+"\n"+body;
+}
+function download(name,text,type){const blob=new Blob([text],{type:type||"text/plain"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportCSV(pageId){const coll=pageColl[pageId];if(!coll||!state[coll].length){toast("No data to export");return}download(pageId+".csv",toCSV(state[coll]),"text/csv");toast("Exported "+pageId+".csv")}
+function exportJSON(){const copy={};Object.keys(pageColl).forEach(p=>copy[pageColl[p]]=state[pageColl[p]]);download("fleetpro-backup.json",JSON.stringify(copy,null,2),"application/json");toast("Backup exported")}
+function importJSON(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);Object.keys(pageColl).forEach(p=>{const c=pageColl[p];if(Array.isArray(data[c]))state[c]=data[c]});ensureIds(state);saveState();renderAll();toast("Backup imported ✓")}catch(err){alert("Invalid backup file.")}};r.readAsText(file);e.target.value="";}
+function resetDemo(){if(!confirm("Replace all current data with demo data?"))return;localStorage.removeItem(STORAGE_KEY);state=loadState();buildPages();renderAll();toast("Demo data restored")}
+function clearAll(){if(!confirm("Delete ALL records? This cannot be undone."))return;Object.keys(pageColl).forEach(p=>state[pageColl[p]]=[]);saveState();renderAll();toast("All data cleared")}
+
+/* ---------------- modal / toast ---------------- */
+function openModal(t,b){document.getElementById("modalTitle").textContent=t;document.getElementById("modalBody").innerHTML=b;document.getElementById("modal").classList.remove("hidden")}
+function closeModal(){document.getElementById("modal").classList.add("hidden")}
+function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.remove("hidden");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add("hidden"),2600)}
+
+/* connect to the shared cloud database if keys are configured */
+initCloud();
+</script>
+</body>
+</html>
