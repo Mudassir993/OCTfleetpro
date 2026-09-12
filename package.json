@@ -1,0 +1,12 @@
+{
+  "name": "oct-fleetpro",
+  "version": "3.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {"start": "node api/index.js"},
+  "dependencies": {
+    "@vercel/node": "latest",
+    "bcryptjs": "latest",
+    "pg": "latest"
+  }
+}
