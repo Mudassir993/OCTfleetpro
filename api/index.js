@@ -52,7 +52,7 @@ async function audit(user,action,page,details={}){ const c=await db(); try{await
 async function handler(req,res){
   const url=new URL(req.url,`http://${req.headers.host||'localhost'}`); const p=url.pathname;
   if(p==='/api/health'){ try{await ensureSchema(); return json(res,200,{ok:true,database:true})}catch(e){return json(res,500,{ok:false,error:e.message})} }
-  if(p==='/api' || p==='/api/index'){
+  if(p==='/' || p==='/api' || p==='/api/index'){
     try{const html=fs.readFileSync(HTML_PATH,'utf8'); res.setHeader('Content-Type','text/html; charset=utf-8'); return res.end(html.replace('</body>',CLOUD_JS+'</body>'));}catch(e){return json(res,500,{error:e.message})}
   }
   if(p==='/fleetpro-cloud.js'){
