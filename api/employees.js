@@ -13,7 +13,10 @@ const DOC_KEYS=['qid','passport','licence','certificate1','certificate2','certif
 
 function json(res,status,data){res.statusCode=status;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data));}
 function tokenHash(t){return crypto.createHash('sha256').update(t).digest('hex');}
-function parseBody(req){return new Promise((resolve,reject)=>{let s='';req.on('data',c=>s+=c);req.on('end',()=>{try{resolve(s?JSON.parse(s):{})}catch(e){reject(e)}});req.on('error',reject);});}
+function parseBody(req){
+  if(req.body && typeof req.body === 'object') return Promise.resolve(req.body);
+  return new Promise((resolve,reject)=>{let s='';req.on('data',c=>s+=c);req.on('end',()=>{try{resolve(s?JSON.parse(s):{})}catch(e){reject(e)}});req.on('error',reject);});
+}
 async function auth(req){
   const h=req.headers.authorization||'';const raw=h.startsWith('Bearer ')?h.slice(7):null;if(!raw)return null;
   const c=await pool.connect();try{const r=await c.query(`SELECT u.id,u.username,u.name,u.role,u.status FROM app_sessions s JOIN app_users u ON u.id=s.user_id WHERE s.token_hash=$1 AND s.expires_at>now() AND u.status='Active'`,[tokenHash(raw)]);return r.rows[0]||null;}finally{c.release();}
@@ -24,6 +27,7 @@ async function audit(u,action,details={}){const c=await pool.connect();try{await
 async function ensureSchema(){
   const c=await pool.connect();
   try{
+    await c.query('CREATE EXTENSION IF NOT EXISTS pgcrypto');
     await c.query(`CREATE TABLE IF NOT EXISTS employees (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(), employee_id TEXT NOT NULL UNIQUE, name TEXT NOT NULL,
       passport_no TEXT NOT NULL DEFAULT '', designation TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '',
@@ -41,7 +45,6 @@ async function ensureSchema(){
     await c.query(`CREATE INDEX IF NOT EXISTS idx_employees_name ON employees(name);`);
     await c.query(`CREATE INDEX IF NOT EXISTS idx_employees_passport ON employees(passport_no);`);
     await c.query(`CREATE INDEX IF NOT EXISTS idx_employee_documents_expiry ON employee_documents(expiry_date);`);
-    // One-time migration of legacy employee records already stored in the workspace JSON.
     const n=await c.query('SELECT COUNT(*)::int n FROM employees');
     if(n.rows[0].n===0){
       const w=await c.query('SELECT state FROM app_workspace WHERE id=1');
