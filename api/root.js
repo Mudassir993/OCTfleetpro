@@ -5,7 +5,8 @@ module.exports = function handler(req, res) {
   try {
     const htmlPath = path.join(process.cwd(), 'index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
-    const adapter = '\n<script src="/fleetpro-cloud.js?v=3"></script>\n<script src="/equipment-display.js?v=2"></script>\n<script src="/employee-blob.js?v=1"></script>\n';
+    const tag = (src) => '\n<scr' + 'ipt src="' + src + '"></scr' + 'ipt>\n';
+    const adapter = tag('/fleetpro-cloud.js?v=3') + tag('/equipment-display.js?v=2') + tag('/employee-blob.js?v=1') + tag('/admin-role-fix.js?v=1');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.statusCode = 200;
