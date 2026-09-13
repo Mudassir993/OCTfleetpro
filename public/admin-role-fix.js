@@ -1,24 +1,32 @@
-/* OCT FleetPro - restore Admin role after cloud state hydration */
+/* OCT FleetPro - stable Administrator role synchronization */
 (function(){
-  function fixAdminRole(){
+  function syncAdmin(){
     try{
       var u=window.octCloud&&window.octCloud.user;
-      if(!u || u.role!=='Administrator' || !window.state) return false;
-      if(state.role!=='admin') state.role='admin';
+      if(!u||!window.state)return false;
+      var isAdmin=u.role==='Administrator';
+      state.role=isAdmin?'admin':'user';
       state.user=u.username;
       var label=document.getElementById('roleLabel');
-      if(label) label.textContent='ADMINISTRATOR';
-      if(typeof window.buildNav==='function') window.buildNav();
-      if(typeof window.installStaffNav==='function') window.installStaffNav();
-      if(typeof window.installEquipmentTestUI==='function') window.installEquipmentTestUI();
+      if(label)label.textContent=isAdmin?'ADMINISTRATOR':'STAFF / USER';
+      if(isAdmin&&typeof window.octInstallStaffNav==='function')window.octInstallStaffNav();
       return true;
-    }catch(e){ console.warn('Admin role fix:',e); return false; }
+    }catch(e){console.warn('Role sync:',e);return false;}
+  }
+  function wrapLogin(){
+    if(typeof window.login!=='function'||window.login.__octStableWrapped)return;
+    var original=window.login;
+    async function stableLogin(){
+      var result=await original.apply(this,arguments);
+      syncAdmin();
+      return result;
+    }
+    stableLogin.__octStableWrapped=true;
+    window.login=stableLogin;
   }
   window.addEventListener('DOMContentLoaded',function(){
-    fixAdminRole();
-    setTimeout(fixAdminRole,300);
-    setTimeout(fixAdminRole,1000);
-    setTimeout(fixAdminRole,2000);
-    setInterval(fixAdminRole,1000);
+    wrapLogin();
+    setTimeout(wrapLogin,0);
+    setTimeout(syncAdmin,50);
   });
 })();
