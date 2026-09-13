@@ -25,11 +25,14 @@ module.exports=async function handler(req,res){
     const c=await pool.connect();let doc;
     try{const r=await c.query('SELECT id,doc_key,name,content_type FROM employee_documents WHERE pathname=$1',[pathname]);doc=r.rows[0];}finally{c.release();}
     if(!doc)return json(res,404,{error:'Document not registered'});
-    const result=await get(pathname,{access:'private'});if(!result||result.statusCode!==200)return json(res,404,{error:'File not found in secure storage'});
-    res.setHeader('Content-Type',doc.content_type||result.blob?.contentType||'application/octet-stream');
-    res.setHeader('Content-Disposition',`attachment; filename*=UTF-8''${encodeURIComponent(doc.name||result.blob?.pathname||'document')}`);
-    res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Cache-Control','private, no-store');if(result.blob?.etag)res.setHeader('ETag',result.blob.etag);
-    if(result.stream&&typeof result.stream.getReader==='function')return Readable.fromWeb(result.stream).pipe(res);
+    const result=await get(pathname,{access:'private'});
+    if(!result||!result.stream)return json(res,404,{error:'File not found in secure storage'});
+    const blob=result.blob||{};
+    res.setHeader('Content-Type',doc.content_type||blob.contentType||'application/octet-stream');
+    res.setHeader('Content-Disposition',`attachment; filename*=UTF-8''${encodeURIComponent(doc.name||blob.pathname||'document')}`);
+    res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Cache-Control','private, no-store');if(blob.etag)res.setHeader('ETag',blob.etag);
+    if(typeof result.stream.getReader==='function')return Readable.fromWeb(result.stream).pipe(res);
+    if(typeof result.stream.pipe==='function')return result.stream.pipe(res);
     return res.end();
-  }catch(e){console.error('Employee Blob download error',e);return json(res,500,{error:'Could not retrieve document'});}
+  }catch(e){console.error('Employee Blob download error',e);return json(res,500,{error:e.message||'Could not retrieve document'});}
 };
