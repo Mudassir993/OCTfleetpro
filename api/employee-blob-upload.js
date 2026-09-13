@@ -11,9 +11,9 @@ const pool = new Pool({
 });
 
 function tokenHash(t){ return crypto.createHash('sha256').update(t).digest('hex'); }
-async function auth(req){
+async function auth(req, suppliedToken){
   const h=req.headers.authorization||'';
-  const raw=h.startsWith('Bearer ')?h.slice(7):null;
+  const raw=h.startsWith('Bearer ')?h.slice(7):(suppliedToken||null);
   if(!raw) return null;
   const c=await pool.connect();
   try{
@@ -23,23 +23,24 @@ async function auth(req){
     return r.rows[0]||null;
   }finally{c.release();}
 }
-function parseBody(req){
-  return new Promise((resolve,reject)=>{
-    let s='';
-    req.on('data',c=>s+=c);
-    req.on('end',()=>{try{resolve(s?JSON.parse(s):{})}catch(e){reject(e)}});
-    req.on('error',reject);
-  });
-}
 function json(res,status,data){res.statusCode=status;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data));}
 
 module.exports = async function handler(req,res){
   if(req.method!=='POST') return json(res,405,{error:'POST required'});
   try{
-    const user=await auth(req);
+    // Vercel Node functions expose parsed request bodies. The previous implementation
+    // attempted to read the stream again, which could leave handleUpload with an empty body.
+    const body = req.body || {};
+    let suppliedToken=null;
+    try{
+      const cp=body?.payload?.clientPayload;
+      if(cp){ suppliedToken=JSON.parse(cp).sessionToken||null; }
+    }catch(e){ suppliedToken=null; }
+
+    const user=await auth(req,suppliedToken);
     if(!user) return json(res,401,{error:'Authentication required'});
     if(!['Administrator','Supervisor','HR','Data Entry'].includes(user.role)) return json(res,403,{error:'Your role cannot upload employee documents'});
-    const body=await parseBody(req);
+
     const response=await handleUpload({
       body,
       request:req,
@@ -59,8 +60,6 @@ module.exports = async function handler(req,res){
         };
       },
       onUploadCompleted: async ({blob,tokenPayload})=>{
-        // The browser stores the returned blob pathname in the employee JSON state.
-        // Keeping this callback side-effect free avoids duplicate state writes.
         return {ok:true};
       }
     });
