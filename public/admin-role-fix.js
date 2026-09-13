@@ -9,7 +9,12 @@
       state.user=u.username;
       var label=document.getElementById('roleLabel');
       if(label)label.textContent=isAdmin?'ADMINISTRATOR':'STAFF / USER';
-      if(isAdmin&&typeof window.octInstallStaffNav==='function')window.octInstallStaffNav();
+      if(isAdmin){
+        if(typeof window.buildNav==='function')window.buildNav();
+        if(typeof window.buildPages==='function')window.buildPages();
+        if(typeof window.octInstallStaffNav==='function')window.octInstallStaffNav();
+        if(typeof window.showPage==='function')window.showPage('dashboard');
+      }
       return true;
     }catch(e){console.warn('Role sync:',e);return false;}
   }
